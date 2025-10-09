@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Photo Grid Generator — v5 (Neon Pro, Live 16:9)</title>
+<title>Photo Grid Generator — By KingPanda#6669</title>
 <style>
 :root{
   --bg:#050814; --card:#071422; --muted:#9fb0c4; --neon:#28a8ff; --neon-weak:rgba(40,168,255,0.12);
@@ -37,7 +37,7 @@ body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;backgr
 .profile{display:flex;gap:12px;align-items:center;padding:12px;border-radius:10px;background:linear-gradient(180deg,#02121a,#031429);border:1px solid rgba(255,255,255,0.02)}
 .avatar{width:72px;height:72px;border-radius:14px;overflow:hidden;border:2px solid rgba(255,255,255,0.03)}
 .avatar img{width:100%;height:100%;object-fit:cover}
-.license{text-align:center;color:var(--muted);margin-top:8px;font-size:12px}
+.license{display:flex;justify-content:center;align-items:center;text-align:center;color:var(--muted);margin-top:8px;font-size:12px}
 .warning{color:#ffb4b4;background:rgba(255,80,80,0.06);padding:8px;border-radius:8px;border:1px solid rgba(255,80,80,0.12);margin-top:8px}
 .controls-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .note{font-size:12px;color:var(--muted);margin-top:8px}
@@ -47,10 +47,10 @@ body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;backgr
 <div class="container">
   <div class="header">
     <div>
-      <div class="title">Photo Grid Generator — v5</div>
+      <div class="title">Photo Grid Generator — v1</div>
       <div class="subtitle">Live 16:9 preview • Outline modes • Column limit • Neon UI</div>
     </div>
-    // <div class="small">KingPanda-Dev</div>
+    <!-- <div class="small">KingPanda-Dev</div> -->
   </div>
 
   <div class="layout">
@@ -64,7 +64,7 @@ body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;backgr
           <div>
             <div class="small" style="font-weight:700">Grid</div>
             <div class="row"><div class="label">Columns (X)</div><input id="cols" class="input" type="number" min="1" max="10" value="3"></div>
-            <div class="row" style="margin-top:6px"><div class="label">Rows (Y)</div><input id="rows" class="input" type="number" min="1" value="3"></div>
+            <div class="row" style="margin-top:6px"><div class="label">Rows (Y)</div><input id="rows" class="input" type="number" min="1" max="10" value="3"></div>
             <div class="note">Max columns: <strong>10</strong>. Jika melebihi, download akan dinonaktifkan.</div>
           </div>
 
@@ -126,7 +126,7 @@ body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;backgr
             <div style="font-weight:800">KingPanda#6669</div>
             <div style="color:var(--neon);font-size:13px;margin-top:4px">Developer / Creator</div>
             <div class="small" style="margin-top:8px">Creator of Photo Grid Generator. Add on Discord to collab: <strong>KingPanda#6669</strong></div>
-            <div style="margin-top:8px"><a id="discordLink" class="btn" href="https://discordapp.com/users/675212142701576234" target="_blank">Open Discord Profile</a></div>
+            <div style="margin-top:3px"><a id="discordLink" class="btn" href="https://discordapp.com/users/675212142701576234" target="_blank">Open Discord Profile</a></div>
           </div>
         </div>
       </div>
