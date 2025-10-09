@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Photo Grid Generator</title>
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --accent:#1e90ff; --muted:#9aa6b2; --text:#e6eef6;
+    }
+    *{box-sizing:border-box}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial; margin:0; background:linear-gradient(180deg,var(--bg),#071027); color:var(--text); min-height:100vh; padding:28px}
+    .container{max-width:1100px;margin:0 auto}
+    .card{background:linear-gradient(180deg,var(--card),#071227); padding:18px;border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,.6)}
+    h1{margin:0 0 12px;font-size:20px}
+    .controls{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px}
+    .row{display:flex;gap:8px;align-items:center}
+    label{font-size:13px;color:var(--muted);min-width:120px}
+    input[type=number], input[type=text], select, input[type=color]{padding:8px;border-radius:8px;border:1px solid rgba(200,210,220,.05);background:transparent;color:var(--text)}
+    input[type=file]{color:var(--muted)}
+    button{background:var(--accent);color:#01233a;border:none;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:600}
+    button.secondary{background:transparent;border:1px solid rgba(255,255,255,.06)}
+    .preview{display:grid;grid-template-columns:1fr 340px;gap:16px;margin-top:18px}
+    .grid-wrap{background:#071827;padding:12px;border-radius:10px;min-height:300px;display:flex;align-items:center;justify-content:center}
+    .grid{display:grid;gap:6px}
+    .thumb{width:100%;height:100%;object-fit:cover;border-radius:6px}
+    .right{background:linear-gradient(180deg,#041428,#071b2b);padding:12px;border-radius:10px}
+    .small{font-size:12px;color:var(--muted)}
+    .controls-full{grid-column:1 / -1;display:flex;gap:8px;flex-wrap:wrap}
+    .footer{display:flex;gap:8px;align-items:center;margin-top:12px}
+    .input-row{display:flex;gap:8px;align-items:center}
+    .color-row{display:flex;gap:8px;align-items:center}
+    .note{font-size:12px;color:var(--muted);margin-top:8px}
+    @media(max-width:900px){.controls{grid-template-columns:1fr}.preview{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Photo Grid Generator — single-file HTML</h1>
+      <div class="controls">
+        <div>
+          <div class="row">
+            <label>Upload Images</label>
+            <input id="files" type="file" accept="image/*" multiple />
+          </div>
+          <div class="row" style="margin-top:8px;">
+            <label>Columns (X)</label>
+            <input id="cols" type="number" value="3" min="1" max="50" />
+          </div>
+          <div class="row" style="margin-top:8px;">
+            <label>Rows (Y)</label>
+            <input id="rows" type="number" value="3" min="1" max="50" />
+          </div>
+          <div class="row" style="margin-top:8px;">
+            <label>Cell size (px)</label>
+            <input id="cellSize" type="number" value="400" min="50" max="3000" />
+          </div>
+        </div>
+
+        <div>
+          <div class="row">
+            <label>Filename template</label>
+            <input id="nameTemplate" type="text" value="photo_{index}" />
+          </div>
+          <div class="row" style="margin-top:8px;">
+            <label>Output format</label>
+            <select id="format">
+              <option value="image/png">PNG</option>
+              <option value="image/jpeg">JPG (JPEG)</option>
+              <option value="image/webp">WEBP</option>
+            </select>
+          </div>
+          <div class="row" style="margin-top:8px;">
+            <label>JPEG quality</label>
+            <input id="quality" type="number" value="0.92" step="0.01" min="0.1" max="1" />
+          </div>
+          <div class="row" style="margin-top:8px;">
+            <label>Outline per image?</label>
+            <input id="outlineToggle" type="checkbox" />
+          </div>
+          <div class="row" style="margin-top:8px;">
+            <label>Outline color</label>
+            <input id="outlineColor" type="color" value="#ffffff" />
+          </div>
+          <div class="row" style="margin-top:8px;">
+            <label>Outline width (px)</label>
+            <input id="outlineWidth" type="number" value="6" min="0" max="200" />
+          </div>
+        </div>
+
+        <div class="controls-full">
+          <div class="row">
+            <button id="render">Render Preview</button>
+            <button id="downloadGrid" class="secondary">Download Grid (single image)</button>
+            <button id="downloadIndiv" class="secondary">Download Individually</button>
+            <button id="clear" class="secondary">Clear</button>
+          </div>
+          <div style="flex:1" class="note">Tip: gunakan <code>{index}</code> di template nama untuk nomor urut (mis. photo_{index}). Jika jumlah gambar kurang dari cell, sisanya akan kosong.</div>
+        </div>
+      </div>
+
+      <div class="preview">
+        <div class="grid-wrap card" id="previewArea">
+          <div id="gridPreview" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column">
+            <div class="small">Preview kosong — upload gambar lalu klik Render Preview</div>
+          </div>
+        </div>
+
+        <div class="right">
+          <div class="small">Preview settings</div>
+          <div style="height:10px"></div>
+          <canvas id="hiddenCanvas" style="display:none"></canvas>
+          <div id="info" class="small" style="margin-top:8px">Ready.</div>
+          <div style="height:10px"></div>
+          <div class="note">Gunakan file HTML ini langsung di GitHub Pages. File ini single-file (no external libs).</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+// Photo Grid Generator - single-file
+const filesEl = document.getElementById('files');
+const colsEl = document.getElementById('cols');
+const rowsEl = document.getElementById('rows');
+const cellSizeEl = document.getElementById('cellSize');
+const nameTemplateEl = document.getElementById('nameTemplate');
+const formatEl = document.getElementById('format');
+const qualityEl = document.getElementById('quality');
+const outlineToggleEl = document.getElementById('outlineToggle');
+const outlineColorEl = document.getElementById('outlineColor');
+const outlineWidthEl = document.getElementById('outlineWidth');
+const renderBtn = document.getElementById('render');
+const downloadGridBtn = document.getElementById('downloadGrid');
+const downloadIndivBtn = document.getElementById('downloadIndiv');
+const clearBtn = document.getElementById('clear');
+const preview = document.getElementById('gridPreview');
+const hiddenCanvas = document.getElementById('hiddenCanvas');
+const info = document.getElementById('info');
+
+let images = [];
+
+function setInfo(t){ info.textContent = t }
+
+filesEl.addEventListener('change', async e => {
+  images = [];
+  const files = Array.from(e.target.files);
+  if(!files.length) return;
+  setInfo('Memuat gambar...');
+  for(const f of files){
+    if(!f.type.startsWith('image/')) continue;
+    const data = await readFileAsDataURL(f);
+    try{
+      const img = await loadImage(data);
+      images.push({file:f, img, data});
+    }catch(err){ console.warn('gambar gagal dimuat', f.name, err) }
+  }
+  setInfo(images.length + ' gambar siap. Klik Render Preview.');
+});
+
+function readFileAsDataURL(file){
+  return new Promise((res,rej)=>{
+    const r = new FileReader();
+    r.onload = ()=>res(r.result);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+function loadImage(dataURL){
+  return new Promise((res,rej)=>{
+    const i = new Image();
+    i.onload = ()=>res(i);
+    i.onerror = rej;
+    i.src = dataURL;
+  });
+}
+
+function renderPreview(){
+  const cols = Math.max(1, parseInt(colsEl.value)||1);
+  const rows = Math.max(1, parseInt(rowsEl.value)||1);
+  const cell = Math.max(20, parseInt(cellSizeEl.value)||100);
+  const gap = 6; // preview gap
+  const outline = outlineToggleEl.checked;
+  const outlineW = Math.max(0, parseInt(outlineWidthEl.value)||0);
+  const outlineColor = outlineColorEl.value;
+
+  // Build CSS grid preview inside preview element
+  preview.innerHTML = '';
+  const wrapper = document.createElement('div');
+  wrapper.className = 'grid';
+  wrapper.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+  wrapper.style.gap = gap + 'px';
+  wrapper.style.width = '100%';
+
+  const totalCells = cols * rows;
+  for(let i=0;i<totalCells;i++){
+    const cellEl = document.createElement('div');
+    cellEl.style.width = '100%';
+    cellEl.style.paddingTop = (100/cols) + '%'; // responsive square trick (not perfect but ok)
+    cellEl.style.position = 'relative';
+    cellEl.style.minHeight = cell+'px';
+    cellEl.style.overflow = 'hidden';
+    cellEl.style.borderRadius = '8px';
+    if(outline && outlineW>0) cellEl.style.boxShadow = `0 0 0 ${outlineW}px ${outlineColor} inset`;
+
+    const imgEl = document.createElement('img');
+    imgEl.className = 'thumb';
+    imgEl.style.position = 'absolute';
+    imgEl.style.top = '0'; imgEl.style.left = '0'; imgEl.style.width='100%'; imgEl.style.height='100%'; imgEl.style.objectFit='cover';
+
+    if(images[i]) imgEl.src = images[i].data;
+    else imgEl.style.background = '#021224';
+
+    cellEl.appendChild(imgEl);
+    wrapper.appendChild(cellEl);
+  }
+  preview.appendChild(wrapper);
+  setInfo(`Preview: ${cols} x ${rows} cells — ${images.length} gambar loaded`);
+}
+
+async function generateCanvas(){
+  const cols = Math.max(1, parseInt(colsEl.value)||1);
+  const rows = Math.max(1, parseInt(rowsEl.value)||1);
+  const cell = Math.max(20, parseInt(cellSizeEl.value)||100);
+  const outline = outlineToggleEl.checked;
+  const outlineW = Math.max(0, parseInt(outlineWidthEl.value)||0);
+  const outlineColor = outlineColorEl.value;
+
+  const totalW = cols * cell + (cols-1)*0;
+  const totalH = rows * cell + (rows-1)*0;
+  hiddenCanvas.width = totalW;
+  hiddenCanvas.height = totalH;
+  const ctx = hiddenCanvas.getContext('2d');
+
+  // Fill background white for JPG (avoid transparent backgrounds unless PNG/WebP chosen)
+  if(formatEl.value === 'image/jpeg'){
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0,0,totalW,totalH);
+  } else {
+    ctx.clearRect(0,0,totalW,totalH);
+  }
+
+  // draw images cell by cell
+  const totalCells = cols * rows;
+  for(let i=0;i<totalCells;i++){
+    const colIdx = i % cols;
+    const rowIdx = Math.floor(i / cols);
+    const x = colIdx * cell;
+    const y = rowIdx * cell;
+
+    if(images[i] && images[i].img){
+      const img = images[i].img;
+      // cover fit calculation
+      const imgRatio = img.width / img.height;
+      const cellRatio = cell / cell; // 1
+      let drawW = cell, drawH = cell, dx = x, dy = y;
+      if(imgRatio > 1){ // wide image -> fit height
+        drawH = cell;
+        drawW = img.width * (cell / img.height);
+        dx = x - (drawW - cell)/2;
+      } else {
+        drawW = cell;
+        drawH = img.height * (cell / img.width);
+        dy = y - (drawH - cell)/2;
+      }
+      ctx.drawImage(img, dx, dy, drawW, drawH);
+      if(outline && outlineW>0){
+        ctx.lineWidth = outlineW;
+        ctx.strokeStyle = outlineColor;
+        // stroke rect centered on border
+        ctx.strokeRect(x + outlineW/2, y + outlineW/2, cell - outlineW, cell - outlineW);
+      }
+    } else {
+      // empty cell - leave transparent or fill with dark color
+      ctx.fillStyle = '#021224';
+      ctx.fillRect(x,y,cell,cell);
+      if(outline && outlineW>0){
+        ctx.lineWidth = outlineW;
+        ctx.strokeStyle = outlineColor;
+        ctx.strokeRect(x + outlineW/2, y + outlineW/2, cell - outlineW, cell - outlineW);
+      }
+    }
+  }
+  return hiddenCanvas;
+}
+
+function downloadURI(uri, name){
+  const a = document.createElement('a');
+  a.href = uri;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+renderBtn.addEventListener('click', ()=>{
+  renderPreview();
+});
+
+downloadGridBtn.addEventListener('click', async ()=>{
+  if(!images.length){ setInfo('Tidak ada gambar. Upload dulu.'); return; }
+  setInfo('Membuat grid...');
+  const canvas = await generateCanvas();
+  const fmt = formatEl.value;
+  const q = Math.min(1, Math.max(0.1, parseFloat(qualityEl.value)||0.92));
+  const data = canvas.toDataURL(fmt, fmt === 'image/jpeg' ? q : undefined);
+  const name = (nameTemplateEl.value || 'grid') + (fmt === 'image/png' ? '.png' : fmt === 'image/jpeg' ? '.jpg' : '.webp');
+  downloadURI(data, name);
+  setInfo('Selesai. File di-download.');
+});
+
+downloadIndivBtn.addEventListener('click', async ()=>{
+  if(!images.length){ setInfo('Tidak ada gambar. Upload dulu.'); return; }
+  setInfo('Menyiapkan unduhan...');
+  const fmt = formatEl.value;
+  const q = Math.min(1, Math.max(0.1, parseFloat(qualityEl.value)||0.92));
+  // For each image, draw to canvas of cell size and download
+  const cell = Math.max(20, parseInt(cellSizeEl.value)||100);
+  for(let i=0;i<images.length;i++){
+    const c = document.createElement('canvas');
+    c.width = cell; c.height = cell;
+    const ctx = c.getContext('2d');
+    // white bg for JPG
+    if(fmt === 'image/jpeg'){ ctx.fillStyle='#fff'; ctx.fillRect(0,0,c.width,c.height); }
+    const img = images[i].img;
+    // cover fit
+    const imgRatio = img.width / img.height;
+    let drawW = cell, drawH = cell, dx=0, dy=0;
+    if(imgRatio > 1){ drawH = cell; drawW = img.width * (cell / img.height); dx = -(drawW - cell)/2; }
+    else { drawW = cell; drawH = img.height * (cell / img.width); dy = -(drawH - cell)/2; }
+    ctx.drawImage(img, dx, dy, drawW, drawH);
+    if(outlineToggleEl.checked && parseInt(outlineWidthEl.value) > 0){
+      ctx.lineWidth = parseInt(outlineWidthEl.value);
+      ctx.strokeStyle = outlineColorEl.value;
+      ctx.strokeRect(ctx.lineWidth/2, ctx.lineWidth/2, cell - ctx.lineWidth, cell - ctx.lineWidth);
+    }
+    const data = c.toDataURL(fmt, fmt === 'image/jpeg' ? q : undefined);
+    const index = i+1;
+    const name = (nameTemplateEl.value || 'photo_{index}').replace('{index}', index) + (fmt === 'image/png' ? '.png' : fmt === 'image/jpeg' ? '.jpg' : '.webp');
+    downloadURI(data, name);
+  }
+  setInfo('Selesai. Semua gambar di-download satu per satu.');
+});
+
+clearBtn.addEventListener('click', ()=>{
+  images = [];
+  filesEl.value = '';
+  preview.innerHTML = '<div class="small">Preview kosong — upload gambar lalu klik Render Preview</div>';
+  setInfo('Bersih.');
+});
+
+// initial demo: nothing
+setInfo('Ready. Upload images dan atur grid.');
+
+</script>
+</body>
+</html>
