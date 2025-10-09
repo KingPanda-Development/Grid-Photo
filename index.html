@@ -3,23 +3,22 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Photo Grid Generator — v4 Real-Time (16:9 Preview)</title>
+<title>Photo Grid Generator — v5 (Neon Pro, Live 16:9)</title>
 <style>
 :root{
-  --bg:#050814; --card:#071422; --panel:#041826; --muted:#9fb0c4; --neon:#28a8ff; --neon-weak:rgba(40,168,255,0.12);
+  --bg:#050814; --card:#071422; --muted:#9fb0c4; --neon:#28a8ff; --neon-weak:rgba(40,168,255,0.12);
 }
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;background:linear-gradient(180deg,#01030a,var(--bg));color:#e6f6ff}
-.container{max-width:1200px;margin:20px auto;padding:18px}
-.header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.container{max-width:1200px;margin:18px auto;padding:16px}
+.header{display:flex;align-items:center;justify-content:space-between}
 .title{font-size:20px;font-weight:800}
 .subtitle{color:var(--muted);font-size:13px}
-.layout{display:grid;grid-template-columns:1fr 520px;gap:18px;margin-top:16px}
+.layout{display:grid;grid-template-columns:1fr 560px;gap:18px;margin-top:14px}
 @media(max-width:980px){.layout{grid-template-columns:1fr}}
-.card{background:linear-gradient(180deg,var(--card),#02121a);border-radius:12px;padding:14px;box-shadow:0 10px 40px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.03)}
+.card{background:linear-gradient(180deg,var(--card),#02121a);border-radius:12px;padding:14px;box-shadow:0 10px 40px rgba(0,0,0,.6);border:1px solid rgba(255,255,255,0.03)}
 .section-title{font-weight:700;color:#dff7ff;margin-bottom:8px}
-.controls{display:grid;gap:12px}
 .row{display:flex;gap:8px;align-items:center}
 .label{min-width:110px;color:var(--muted);font-size:13px}
 .input,select{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px;border-radius:10px;color:var(--muted);width:100%}
@@ -27,88 +26,99 @@ body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;backgr
 .btn.neon{box-shadow:0 0 8px var(--neon-weak);border:1px solid rgba(40,168,255,0.25)}
 .btn.neon:hover{transform:translateY(-3px);box-shadow:0 12px 48px rgba(40,168,255,0.14),0 0 36px rgba(40,168,255,0.25);border-color:var(--neon)}
 .small{font-size:12px;color:var(--muted)}
-.preview-card{display:flex;flex-direction:column;gap:12px}
 .preview-shell{width:100%;aspect-ratio:16/9;max-height:60vh;border-radius:12px;background:#02161a;padding:12px;border:1px solid rgba(40,168,255,0.06);box-shadow:0 8px 40px rgba(2,6,23,0.6);position:relative;overflow:hidden}
 .preview-screen{width:100%;height:100%;background:#000;border-radius:8px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .preview-inner{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:grid;grid-auto-flow:row;align-content:start}
 .grid-item{display:inline-block;border-radius:8px;overflow:hidden;background:#021219;padding:2px}
 .grid-item img{display:block;height:auto;width:auto;max-width:100%;}
-.preview-frame-glow{pointer-events:none;position:absolute;inset:0;border-radius:12px;box-shadow:0 0 40px rgba(40,168,255,0.08) inset;}
+.preview-frame-glow{pointer-events:none;position:absolute;inset:0;border-radius:12px;box-shadow:0 0 40px rgba(40,168,255,0.08) inset}
 .controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media(max-width:600px){.controls-grid{grid-template-columns:1fr}}
 .profile{display:flex;gap:12px;align-items:center;padding:12px;border-radius:10px;background:linear-gradient(180deg,#02121a,#031429);border:1px solid rgba(255,255,255,0.02)}
 .avatar{width:72px;height:72px;border-radius:14px;overflow:hidden;border:2px solid rgba(255,255,255,0.03)}
 .avatar img{width:100%;height:100%;object-fit:cover}
 .license{text-align:center;color:var(--muted);margin-top:8px;font-size:12px}
-.slider{width:100%}
-.footer-box{display:flex;flex-direction:column;gap:8px}
-.note{font-size:12px;color:var(--muted)}
+.warning{color:#ffb4b4;background:rgba(255,80,80,0.06);padding:8px;border-radius:8px;border:1px solid rgba(255,80,80,0.12);margin-top:8px}
+.controls-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.note{font-size:12px;color:var(--muted);margin-top:8px}
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">
     <div>
-      <div class="title">Photo Grid Generator — v4 (Live Preview 16:9)</div>
-      <div class="subtitle">Preview updates instantly — export HD with single click</div>
+      <div class="title">Photo Grid Generator — v5</div>
+      <div class="subtitle">Live 16:9 preview • Outline modes • Column limit • Neon UI</div>
     </div>
-    <div class="small">KingPanda-Dev</div>
+    // <div class="small">KingPanda-Dev</div>
   </div>
 
   <div class="layout">
-
-    <!-- Settings -->
+    <!-- Settings column -->
     <div class="card">
       <div class="section-title">Settings</div>
-      <div class="controls">
+      <div>
         <div class="row"><div class="label">Upload Images</div><input id="files" class="input" type="file" accept="image/*" multiple /></div>
 
-        <div class="controls-grid">
+        <div class="controls-grid" style="margin-top:10px">
           <div>
             <div class="small" style="font-weight:700">Grid</div>
-            <div class="row"><div class="label">Columns (X)</div><input id="cols" class="input" type="number" min="1" value="3"></div>
-            <div class="row"><div class="label">Rows (Y)</div><input id="rows" class="input" type="number" min="1" value="3"></div>
+            <div class="row"><div class="label">Columns (X)</div><input id="cols" class="input" type="number" min="1" max="10" value="3"></div>
+            <div class="row" style="margin-top:6px"><div class="label">Rows (Y)</div><input id="rows" class="input" type="number" min="1" value="3"></div>
+            <div class="note">Max columns: <strong>10</strong>. Jika melebihi, download akan dinonaktifkan.</div>
           </div>
 
           <div>
-            <div class="small" style="font-weight:700">Export & Outline</div>
+            <div class="small" style="font-weight:700">Export</div>
             <div class="row"><div class="label">Quality</div><select id="quality" class="input"><option value="480">480p</option><option value="720" selected>720p</option><option value="1080">1080p</option></select></div>
-            <div class="row"><div class="label">Format</div><select id="format" class="input"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option value="image/webp">WEBP</option></select></div>
+            <div class="row" style="margin-top:6px"><div class="label">Format</div><select id="format" class="input"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option value="image/webp">WEBP</option></select></div>
           </div>
         </div>
 
-        <div>
-          <div class="small" style="font-weight:700;margin-top:6px">Outline</div>
-          <div class="row"><div class="label">Mode</div><select id="outlineMode" class="input"><option value="off">Off</option><option value="neon">Neon Glow</option></select></div>
-          <div class="row"><div class="label">Color</div><input id="outlineColor" class="input" type="color" value="#28a8ff"></div>
-          <div class="row"><div class="label">Width</div><select id="outlineWidth" class="input"><option value="2">2px</option><option value="4">4px</option><option value="8">8px</option></select></div>
+        <div style="margin-top:12px">
+          <div class="small" style="font-weight:700">Outline</div>
+          <div class="row"><div class="label">Mode</div>
+            <select id="outlineMode" class="input">
+              <option value="off">Off</option>
+              <option value="basic">Basic</option>
+              <option value="neon">Neon</option>
+              <option value="glow">Glow</option>
+              <option value="soft">Soft Shadow</option>
+            </select>
+          </div>
+          <div class="row" style="margin-top:6px"><div class="label">Width</div><select id="outlineWidth" class="input"><option value="1">1px</option><option value="2">2px</option><option value="3">3px</option><option value="4">4px</option><option value="5">5px</option></select></div>
+          <div class="row" style="margin-top:6px"><div class="label">Color</div><input id="outlineColor" class="input" type="color" value="#28a8ff"></div>
         </div>
 
-        <div>
-          <div class="small" style="font-weight:700;margin-top:6px">Spacing</div>
-          <div class="row"><div class="label">Gap (px)</div><input id="gap" type="range" min="0" max="60" value="12" class="slider"></div>
+        <div style="margin-top:12px">
+          <div class="small" style="font-weight:700">Spacing</div>
+          <div class="row"><div class="label">Gap (px)</div><input id="gap" type="range" min="0" max="60" value="12" class="input"></div>
         </div>
 
-        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <div class="controls-actions">
           <button id="downloadGrid" class="btn neon">Download Grid</button>
           <button id="clear" class="btn">Clear</button>
         </div>
 
-        <div class="note" id="info">Ready — upload images to see the live preview.</div>
+        <div id="warning" style="display:none" class="warning">Warning: Columns exceed 10 — set Columns ≤ 10 to enable download.</div>
+        <div class="note" id="info">Ready — upload images to preview live.</div>
       </div>
     </div>
 
-    <!-- Preview + Profile -->
-    <div class="card">
-      <div class="section-title">Preview</div>
-      <div class="preview-card">
-        <div class="preview-shell" aria-hidden="false">
+    <!-- Right column: Preview card and Profile separate -->
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="card">
+        <div class="section-title">Preview (16:9 Live)</div>
+        <div class="preview-shell">
           <div class="preview-screen">
             <div id="previewInner" class="preview-inner"></div>
             <div class="preview-frame-glow"></div>
           </div>
         </div>
+        <div class="note">Live preview mengikuti semua pengaturan (X, Y, Gap, Outline). Preview disesuaikan agar selalu muat di layar 16:9.</div>
+      </div>
 
+      <div class="card" id="profileCard">
         <div class="section-title">Profile</div>
         <div class="profile">
           <div class="avatar"><img id="avatarImg" src="https://cdn.discordapp.com/avatars/675212142701576234/9d591887b8f29923d3906b0118782c24.png?size=4096&ignore=true" alt="avatar"></div>
@@ -121,14 +131,8 @@ body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;backgr
         </div>
       </div>
 
-      <div style="height:10px"></div>
-      <div class="license">© 2025 KingPanda-Development (Rudi Hartono) | Discord: KingPanda#6669</div>
-    </div>
-
-    <!-- Footer full width -->
-    <div class="card" style="grid-column:1 / -1">
-      <div class="footer-box">
-        <div class="license">Built with ❤️ — Photo Grid Generator v4 • Live preview 16:9 • KingPanda-Development</div>
+      <div class="card" style="text-align:center">
+        <div class="license">© 2025 KingPanda-Development (Rudi Hartono) | Discord: KingPanda#6669</div>
       </div>
     </div>
   </div>
@@ -137,7 +141,7 @@ body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;backgr
 <canvas id="hiddenCanvas" style="display:none"></canvas>
 
 <script>
-// v4 — Live Preview 16:9, real-time, correct HD export
+// v5 — live realtime preview, outline modes, column limit (<=10)
 const filesEl = document.getElementById('files');
 const colsEl = document.getElementById('cols');
 const rowsEl = document.getElementById('rows');
@@ -151,128 +155,55 @@ const qualityEl = document.getElementById('quality');
 const outlineModeEl = document.getElementById('outlineMode');
 const outlineColorEl = document.getElementById('outlineColor');
 const outlineWidthEl = document.getElementById('outlineWidth');
+const warningEl = document.getElementById('warning');
 const hiddenCanvas = document.getElementById('hiddenCanvas');
 
 let images = []; // {file,img,data}
-let needsRender = false;
-let rafScheduled = false;
+let needsRender = false; let rafScheduled = false;
 
 function setInfo(t){ infoEl.textContent = t }
+
+// validate cols <= 10 and disable download if invalid
+function validateCols(){
+  const cols = parseInt(colsEl.value) || 0;
+  if(cols > 10){ warningEl.style.display = 'block'; downloadGridBtn.disabled = true; downloadGridBtn.style.opacity = 0.5; return false; }
+  warningEl.style.display = 'none'; downloadGridBtn.disabled = false; downloadGridBtn.style.opacity = 1; return true;
+}
 
 filesEl.addEventListener('change', async e => {
   const files = Array.from(e.target.files).filter(f=>f.type && f.type.startsWith('image/'));
   if(!files.length){ images=[]; setInfo('No images'); renderLive(); return; }
   setInfo('Loading images...');
-  // load all images concurrently
   const promises = files.map(f=>readFileAsDataURL(f).then(data=>loadImage(data).then(img=>({file:f,img,data}))));
-  try{
-    images = await Promise.all(promises);
-    setInfo(images.length + ' images loaded — preview updated live.');
-    scheduleRender();
-  }catch(err){ console.error(err); setInfo('Failed to load some images.'); }
+  try{ images = await Promise.all(promises); setInfo(images.length + ' images loaded — preview updated live.'); scheduleRender(); }
+  catch(err){ console.error(err); setInfo('Failed to load some images.'); }
 });
 
+// inputs that trigger live render
 [colsEl, rowsEl, gapEl, qualityEl, outlineModeEl, outlineColorEl, outlineWidthEl].forEach(el=>{
-  el.addEventListener('input', ()=>{ scheduleRender(); });
-  el.addEventListener('change', ()=>{ scheduleRender(); });
+  el.addEventListener('input', ()=>{ validateCols(); scheduleRender(); });
+  el.addEventListener('change', ()=>{ validateCols(); scheduleRender(); });
 });
 
 clearBtn.addEventListener('click', ()=>{ images=[]; filesEl.value=''; setInfo('Cleared'); scheduleRender(); });
 
 function scheduleRender(){ needsRender = true; if(!rafScheduled){ rafScheduled = true; requestAnimationFrame(renderLoop); }}
-
 function renderLoop(){ rafScheduled = false; if(needsRender){ renderLive(); needsRender=false; } }
 
 function readFileAsDataURL(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
 function loadImage(data){ return new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=data; }); }
 
 function renderLive(){
-  // clear
   previewInner.innerHTML = '';
   const cols = Math.max(1, parseInt(colsEl.value)||1);
   const rows = Math.max(1, parseInt(rowsEl.value)||1);
   const gap = parseInt(gapEl.value)||0;
-  const outlineOn = outlineModeEl.value === 'neon';
+  const outlineMode = outlineModeEl.value;
 
-  // compute sizes for small preview: we need to scale down to fit the preview inner area
-  // gather natural sizes for images in the grid order
-  const totalCells = cols * rows;
-  const placed = [];
-  for(let i=0;i<totalCells;i++) placed[i] = images[i] ? images[i].img : null;
+  // quick validation
+  validateCols();
 
-  // compute column widths and row heights from natural sizes
-  const colWidths = new Array(cols).fill(0);
-  const rowHeights = new Array(rows).fill(0);
-  for(let r=0;r<rows;r++){
-    for(let c=0;c<cols;c++){
-      const idx = r*cols + c;
-      const img = placed[idx];
-      if(img){ colWidths[c] = Math.max(colWidths[c], img.naturalWidth); rowHeights[r] = Math.max(rowHeights[r], img.naturalHeight); }
-      else { colWidths[c] = Math.max(colWidths[c], 140); rowHeights[r] = Math.max(rowHeights[r], 96); }
-    }
-  }
-
-  // compute full size including gaps
-  const fullW = colWidths.reduce((a,b)=>a+b,0) + (cols-1)*gap;
-  const fullH = rowHeights.reduce((a,b)=>a+b,0) + (rows-1)*gap;
-  // preview container size (CSS) -> we scale to fit into previewInner container which sits centered in 16:9 box
-  const shell = previewInner.closest('.preview-screen');
-  const shellW = shell.clientWidth; const shellH = shell.clientHeight;
-  // we want to fit within shell minus some padding
-  const maxW = shellW - 24; const maxH = shellH - 24;
-  const scale = Math.min(1, Math.min(maxW / fullW, maxH / fullH));
-
-  // build DOM grid using absolute positioning to mirror exported layout
-  const container = document.createElement('div');
-  container.style.position = 'relative';
-  container.style.width = Math.round(fullW * scale) + 'px';
-  container.style.height = Math.round(fullH * scale) + 'px';
-  container.style.display = 'block';
-
-  // place items
-  let y = 0;
-  for(let r=0;r<rows;r++){
-    let x = 0;
-    for(let c=0;c<cols;c++){
-      const idx = r*cols + c;
-      const w = colWidths[c]; const h = rowHeights[r];
-      const cell = document.createElement('div');
-      cell.className = 'grid-item';
-      cell.style.position = 'absolute';
-      cell.style.left = (x * scale) + 'px';
-      cell.style.top = (y * scale) + 'px';
-      cell.style.width = (w * scale) + 'px';
-      cell.style.height = (h * scale) + 'px';
-      cell.style.boxSizing = 'border-box';
-      cell.style.padding = '2px';
-      if(outlineOn){ cell.style.boxShadow = `0 8px 28px ${outlineColorEl.value}`; cell.style.border = `${outlineWidthEl.value}px solid ${outlineColorEl.value}`; }
-
-      if(placed[idx]){
-        const img = document.createElement('img');
-        img.src = placed[idx].src;
-        img.style.width = '100%'; img.style.height = '100%'; img.style.objectFit = 'cover';
-        cell.appendChild(img);
-      } else {
-        const ph = document.createElement('div'); ph.style.width='100%'; ph.style.height='100%'; ph.style.background='#011216'; cell.appendChild(ph);
-      }
-      container.appendChild(cell);
-      x += w + gap;
-    }
-    y += rowHeights[r] + gap;
-  }
-
-  previewInner.appendChild(container);
-}
-
-// export uses same layout but renders to canvas at chosen quality (with DPR)
-async function generateCanvas(){
-  if(!images.length) throw new Error('No images');
-  const cols = Math.max(1, parseInt(colsEl.value)||1);
-  const rows = Math.max(1, parseInt(rowsEl.value)||1);
-  const gap = parseInt(gapEl.value)||0;
-  const outlineOn = outlineModeEl.value === 'neon';
-  const total = cols*rows;
-
+  const total = cols * rows;
   const placed = [];
   for(let i=0;i<total;i++) placed[i] = images[i] ? images[i].img : null;
 
@@ -289,38 +220,98 @@ async function generateCanvas(){
   const fullW = colWidths.reduce((a,b)=>a+b,0) + (cols-1)*gap;
   const fullH = rowHeights.reduce((a,b)=>a+b,0) + (rows-1)*gap;
 
-  const preset = parseInt(qualityEl.value) || 720; // target max dimension
-  const maxDim = Math.max(fullW, fullH);
-  const baseScale = maxDim <= preset ? 1 : preset / maxDim;
+  const shell = previewInner.closest('.preview-screen');
+  const shellW = shell.clientWidth; const shellH = shell.clientHeight;
+  const maxW = shellW - 24; const maxH = shellH - 24;
+  const scale = Math.min(1, Math.min(maxW / fullW, maxH / fullH));
 
-  const dpr = Math.max(1, window.devicePixelRatio || 1);
-  hiddenCanvas.width = Math.round(fullW * baseScale * dpr);
-  hiddenCanvas.height = Math.round(fullH * baseScale * dpr);
-  hiddenCanvas.style.width = Math.round(fullW * baseScale) + 'px';
-  hiddenCanvas.style.height = Math.round(fullH * baseScale) + 'px';
-
-  const ctx = hiddenCanvas.getContext('2d');
-  ctx.setTransform(baseScale * dpr, 0, 0, baseScale * dpr, 0, 0);
-
-  if(formatEl.value === 'image/jpeg'){ ctx.fillStyle='#fff'; ctx.fillRect(0,0,fullW,fullH); } else { ctx.clearRect(0,0,fullW,fullH); }
+  const container = document.createElement('div');
+  container.style.position = 'relative';
+  container.style.width = Math.round(fullW * scale) + 'px';
+  container.style.height = Math.round(fullH * scale) + 'px';
 
   let y = 0;
   for(let r=0;r<rows;r++){
     let x = 0;
     for(let c=0;c<cols;c++){
-      const idx = r*cols + c;
-      const img = placed[idx];
-      const w = colWidths[c]; const h = rowHeights[r];
-      if(img){
-        // draw full image using correct source coords (use 9-arg drawImage to be explicit)
-        ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, x, y, img.naturalWidth, img.naturalHeight);
-      } else { ctx.fillStyle='#011216'; ctx.fillRect(x,y,w,h); }
+      const idx = r*cols + c; const w = colWidths[c]; const h = rowHeights[r];
+      const cell = document.createElement('div');
+      cell.className = 'grid-item';
+      cell.style.position = 'absolute';
+      cell.style.left = (x * scale) + 'px';
+      cell.style.top = (y * scale) + 'px';
+      cell.style.width = (w * scale) + 'px';
+      cell.style.height = (h * scale) + 'px';
+      cell.style.boxSizing = 'border-box'; cell.style.padding = '2px';
 
-      if(outlineOn){ ctx.save(); ctx.strokeStyle = outlineColorEl.value; ctx.lineWidth = parseInt(outlineWidthEl.value); ctx.shadowColor = outlineColorEl.value; ctx.shadowBlur = 12; roundRect(ctx, x+1, y+1, w-2, h-2, 10); ctx.stroke(); ctx.restore(); }
+      // apply preview outline per mode
+      if(outlineMode === 'basic'){
+        cell.style.border = `${outlineWidthEl.value}px solid ${outlineColorEl.value}`;
+      }else if(outlineMode === 'neon'){
+        cell.style.border = `${outlineWidthEl.value}px solid ${outlineColorEl.value}`;
+        cell.style.boxShadow = `0 8px 28px ${outlineColorEl.value}`;
+      }else if(outlineMode === 'glow'){
+        cell.style.boxShadow = `0 12px 40px ${outlineColorEl.value}`;
+      }else if(outlineMode === 'soft'){
+        cell.style.boxShadow = `0 6px 16px rgba(0,0,0,0.6), 0 4px 12px ${outlineColorEl.value}33`;
+      }
 
+      if(placed[idx]){
+        const img = document.createElement('img'); img.src = placed[idx].src; img.style.width='100%'; img.style.height='100%'; img.style.objectFit='cover'; cell.appendChild(img);
+      } else { const ph=document.createElement('div'); ph.style.width='100%'; ph.style.height='100%'; ph.style.background='#011216'; cell.appendChild(ph); }
+
+      container.appendChild(cell);
       x += w + gap;
     }
     y += rowHeights[r] + gap;
+  }
+
+  previewInner.appendChild(container);
+}
+
+// Export: wait all images loaded and render to canvas with same layout
+async function generateCanvas(){
+  if(!images.length) throw new Error('No images');
+  const cols = Math.max(1, parseInt(colsEl.value)||1);
+  const rows = Math.max(1, parseInt(rowsEl.value)||1);
+  if(cols > 10) throw new Error('Columns exceed limit');
+  const gap = parseInt(gapEl.value)||0;
+  const outlineMode = outlineModeEl.value; const outlineOn = outlineMode !== 'off';
+
+  const total = cols*rows;
+  const placed = []; for(let i=0;i<total;i++) placed[i] = images[i] ? images[i].img : null;
+
+  const colWidths = new Array(cols).fill(0); const rowHeights = new Array(rows).fill(0);
+  for(let r=0;r<rows;r++) for(let c=0;c<cols;c++){ const idx=r*cols+c; const img=placed[idx]; if(img){ colWidths[c]=Math.max(colWidths[c], img.naturalWidth); rowHeights[r]=Math.max(rowHeights[r], img.naturalHeight);} else { colWidths[c]=Math.max(colWidths[c],140); rowHeights[r]=Math.max(rowHeights[r],96);} }
+
+  const fullW = colWidths.reduce((a,b)=>a+b,0) + (cols-1)*gap;
+  const fullH = rowHeights.reduce((a,b)=>a+b,0) + (rows-1)*gap;
+
+  const preset = parseInt(qualityEl.value) || 720; const maxDim = Math.max(fullW, fullH);
+  const baseScale = maxDim <= preset ? 1 : preset / maxDim;
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+
+  hiddenCanvas.width = Math.round(fullW * baseScale * dpr);
+  hiddenCanvas.height = Math.round(fullH * baseScale * dpr);
+  hiddenCanvas.style.width = Math.round(fullW * baseScale) + 'px'; hiddenCanvas.style.height = Math.round(fullH * baseScale) + 'px';
+  const ctx = hiddenCanvas.getContext('2d'); ctx.setTransform(baseScale * dpr,0,0,baseScale * dpr,0,0);
+
+  if(formatEl.value === 'image/jpeg'){ ctx.fillStyle='#fff'; ctx.fillRect(0,0,fullW,fullH);} else { ctx.clearRect(0,0,fullW,fullH); }
+
+  let y=0; for(let r=0;r<rows;r++){
+    let x=0; for(let c=0;c<cols;c++){
+      const idx=r*cols+c; const img=placed[idx]; const w=colWidths[c]; const h=rowHeights[r];
+      if(img){ ctx.drawImage(img, 0,0,img.naturalWidth,img.naturalHeight, x,y, img.naturalWidth, img.naturalHeight); }
+      else { ctx.fillStyle='#011216'; ctx.fillRect(x,y,w,h);} 
+
+      if(outlineOn){ ctx.save(); const wth = parseInt(outlineWidthEl.value); if(outlineMode==='basic'){ ctx.strokeStyle=outlineColorEl.value; ctx.lineWidth=wth; roundRect(ctx,x+1,y+1,w-2,h-2,6); ctx.stroke(); }
+        else if(outlineMode==='neon'){ ctx.strokeStyle=outlineColorEl.value; ctx.lineWidth=wth; ctx.shadowColor=outlineColorEl.value; ctx.shadowBlur=12; roundRect(ctx,x+1,y+1,w-2,h-2,8); ctx.stroke(); }
+        else if(outlineMode==='glow'){ ctx.strokeStyle=outlineColorEl.value; ctx.lineWidth=wth; ctx.shadowColor=outlineColorEl.value; ctx.shadowBlur=20; roundRect(ctx,x+1,y+1,w-2,h-2,10); ctx.stroke(); }
+        else if(outlineMode==='soft'){ ctx.strokeStyle=outlineColorEl.value+'88'; ctx.lineWidth=wth; ctx.shadowColor='rgba(0,0,0,0.6)'; ctx.shadowBlur=8; roundRect(ctx,x+1,y+1,w-2,h-2,6); ctx.stroke(); }
+        ctx.restore(); }
+
+      x += w + gap;
+    } y += rowHeights[r] + gap;
   }
   return hiddenCanvas;
 }
@@ -329,21 +320,17 @@ function roundRect(ctx,x,y,w,h,r){ if(w<2*r) r=w/2; if(h<2*r) r=h/2; ctx.beginPa
 
 function downloadURI(uri,name){ const a=document.createElement('a'); a.href=uri; a.download=name; document.body.appendChild(a); a.click(); a.remove(); }
 
+// Download handler with validation
 downloadGridBtn.addEventListener('click', async ()=>{
-  if(!images.length){ setInfo('No images uploaded.'); return; }
-  setInfo('Generating HD grid...');
-  try{
-    const canvas = await generateCanvas();
-    const fmt = formatEl.value; const data = canvas.toDataURL(fmt);
-    const ext = fmt==='image/png'?'.png':fmt==='image/jpeg'?'.jpg':'.webp';
-    downloadURI(data, 'grid'+ext);
-    setInfo('Download started.');
-  }catch(err){ console.error(err); setInfo('Export failed: '+err.message); }
+  if(!validateCols()) return; if(!images.length){ setInfo('No images uploaded.'); return; }
+  setInfo('Generating HD grid...'); downloadGridBtn.disabled = true; downloadGridBtn.style.opacity=0.5;
+  try{ const canvas = await generateCanvas(); const fmt = formatEl.value; const data = canvas.toDataURL(fmt); const ext = fmt==='image/png'?'.png':fmt==='image/jpeg'?'.jpg':'.webp'; downloadURI(data,'grid'+ext); setInfo('Download started.'); }
+  catch(err){ console.error(err); setInfo('Export failed: '+err.message); }
+  finally{ validateCols(); }
 });
 
-// initial render
-scheduleRender();
-
+// initial
+validateCols(); scheduleRender();
 </script>
 </body>
 </html>
