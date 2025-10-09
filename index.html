@@ -1,359 +1,333 @@
 <!doctype html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Photo Grid Generator</title>
-  <style>
-    :root{
-      --bg:#0f1724; --card:#0b1220; --accent:#1e90ff; --muted:#9aa6b2; --text:#e6eef6;
-    }
-    *{box-sizing:border-box}
-    body{font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial; margin:0; background:linear-gradient(180deg,var(--bg),#071027); color:var(--text); min-height:100vh; padding:28px}
-    .container{max-width:1100px;margin:0 auto}
-    .card{background:linear-gradient(180deg,var(--card),#071227); padding:18px;border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,.6)}
-    h1{margin:0 0 12px;font-size:20px}
-    .controls{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px}
-    .row{display:flex;gap:8px;align-items:center}
-    label{font-size:13px;color:var(--muted);min-width:120px}
-    input[type=number], input[type=text], select, input[type=color]{padding:8px;border-radius:8px;border:1px solid rgba(200,210,220,.05);background:transparent;color:var(--text)}
-    input[type=file]{color:var(--muted)}
-    button{background:var(--accent);color:#01233a;border:none;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:600}
-    button.secondary{background:transparent;border:1px solid rgba(255,255,255,.06)}
-    .preview{display:grid;grid-template-columns:1fr 340px;gap:16px;margin-top:18px}
-    .grid-wrap{background:#071827;padding:12px;border-radius:10px;min-height:300px;display:flex;align-items:center;justify-content:center}
-    .grid{display:grid;gap:6px}
-    .thumb{width:100%;height:100%;object-fit:cover;border-radius:6px}
-    .right{background:linear-gradient(180deg,#041428,#071b2b);padding:12px;border-radius:10px}
-    .small{font-size:12px;color:var(--muted)}
-    .controls-full{grid-column:1 / -1;display:flex;gap:8px;flex-wrap:wrap}
-    .footer{display:flex;gap:8px;align-items:center;margin-top:12px}
-    .input-row{display:flex;gap:8px;align-items:center}
-    .color-row{display:flex;gap:8px;align-items:center}
-    .note{font-size:12px;color:var(--muted);margin-top:8px}
-    @media(max-width:900px){.controls{grid-template-columns:1fr}.preview{grid-template-columns:1fr}}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Photo Grid Generator — Neon Dark</title>
+<style>
+:root{
+  --bg:#071025; --card:#061327; --panel:#081828; --muted:#9fb0c4; --neon:#28a8ff; --neon-weak:rgba(40,168,255,0.18);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;background:linear-gradient(180deg,#02050a,var(--bg));color:#e6f2ff}
+.container{max-width:1150px;margin:28px auto;padding:20px}
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.title{font-size:20px;font-weight:700}
+.subtitle{color:var(--muted);font-size:13px}
+.grid-layout{display:grid;grid-template-columns:1fr 360px;gap:18px;margin-top:18px}
+.card{background:linear-gradient(180deg,var(--card),#031322);border-radius:12px;padding:14px;box-shadow:0 8px 30px rgba(2,6,23,.6);border:1px solid rgba(255,255,255,0.03)}
+.controls{display:grid;grid-template-columns:1fr;gap:10px}
+.row{display:flex;gap:8px;align-items:center}
+.label{min-width:110px;color:var(--muted);font-size:13px}
+.input, select{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px;border-radius:8px;color:var(--muted);min-width:0}
+.input[type=file]{color:var(--muted)}
+.small{font-size:12px;color:var(--muted)}
+.actions{display:flex;gap:8px;align-items:center;margin-top:8px}
+.btn{background:linear-gradient(180deg,#001824,#002a3a);border:1px solid rgba(255,255,255,0.04);padding:10px 14px;border-radius:10px;color:#dff6ff;font-weight:700;cursor:pointer;position:relative;overflow:visible}
+.btn:focus{outline:none}
+.btn.neon{box-shadow:0 0 10px rgba(40,168,255,0.06);border:1px solid rgba(40,168,255,0.25)}
+.btn.neon:hover{transform:translateY(-3px);box-shadow:0 6px 28px var(--neon-weak),0 0 18px rgba(40,168,255,0.25);border-color:var(--neon)}
+.preview-area{min-height:380px;display:flex;flex-direction:column;gap:12px}
+.preview-wrap{background:linear-gradient(180deg,#031a25,#041827);padding:12px;border-radius:10px;border:1px solid rgba(40,168,255,0.06);box-shadow:0 6px 30px rgba(2,6,23,.6);overflow:auto}
+.grid{display:grid;gap:8px}
+.grid img{display:block}
+.profile-card{display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;background:linear-gradient(180deg,#02121a,#031429);border:1px solid rgba(255,255,255,0.03)}
+.avatar{width:72px;height:72px;border-radius:14px;flex:0 0 72px;overflow:hidden;border:2px solid rgba(255,255,255,0.04)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.profile-info{flex:1}
+.pname{font-weight:700}
+.prole{font-size:12px;color:var(--neon)}
+.license{margin-top:12px;text-align:center;color:var(--muted);font-size:12px}
+.card-section{border-radius:10px;padding:10px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg,#041424,#021221)}
+.setting-column{display:grid;gap:10px}
+.toggle{display:inline-flex;align-items:center;gap:8px}
+.checkbox-fake{width:20px;height:20px;border-radius:6px;border:2px solid rgba(255,255,255,0.06);display:inline-block;position:relative;cursor:pointer;background:transparent}
+.checkbox-fake.active{box-shadow:0 0 12px rgba(40,168,255,0.18);border-color:var(--neon);background:linear-gradient(180deg,rgba(40,168,255,0.06),rgba(40,168,255,0.02))}
+.checkbox-fake .check-dot{position:absolute;inset:3px;border-radius:3px;background:var(--neon);opacity:0;transform:scale(.6)}
+.checkbox-fake.active .check-dot{opacity:1;transform:scale(1)}
+.footer{margin-top:18px}
+.info{font-size:12px;color:var(--muted)}
+@media(max-width:980px){.grid-layout{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-  <div class="container">
-    <div class="card">
-      <h1>Photo Grid Generator — single-file HTML</h1>
-      <div class="controls">
-        <div>
-          <div class="row">
-            <label>Upload Images</label>
-            <input id="files" type="file" accept="image/*" multiple />
-          </div>
-          <div class="row" style="margin-top:8px;">
-            <label>Columns (X)</label>
-            <input id="cols" type="number" value="3" min="1" max="50" />
-          </div>
-          <div class="row" style="margin-top:8px;">
-            <label>Rows (Y)</label>
-            <input id="rows" type="number" value="3" min="1" max="50" />
-          </div>
-          <div class="row" style="margin-top:8px;">
-            <label>Cell size (px)</label>
-            <input id="cellSize" type="number" value="400" min="50" max="3000" />
-          </div>
-        </div>
-
-        <div>
-          <div class="row">
-            <label>Filename template</label>
-            <input id="nameTemplate" type="text" value="photo_{index}" />
-          </div>
-          <div class="row" style="margin-top:8px;">
-            <label>Output format</label>
-            <select id="format">
-              <option value="image/png">PNG</option>
-              <option value="image/jpeg">JPG (JPEG)</option>
-              <option value="image/webp">WEBP</option>
-            </select>
-          </div>
-          <div class="row" style="margin-top:8px;">
-            <label>JPEG quality</label>
-            <input id="quality" type="number" value="0.92" step="0.01" min="0.1" max="1" />
-          </div>
-          <div class="row" style="margin-top:8px;">
-            <label>Outline per image?</label>
-            <input id="outlineToggle" type="checkbox" />
-          </div>
-          <div class="row" style="margin-top:8px;">
-            <label>Outline color</label>
-            <input id="outlineColor" type="color" value="#ffffff" />
-          </div>
-          <div class="row" style="margin-top:8px;">
-            <label>Outline width (px)</label>
-            <input id="outlineWidth" type="number" value="6" min="0" max="200" />
-          </div>
-        </div>
-
-        <div class="controls-full">
-          <div class="row">
-            <button id="render">Render Preview</button>
-            <button id="downloadGrid" class="secondary">Download Grid (single image)</button>
-            <button id="downloadIndiv" class="secondary">Download Individually</button>
-            <button id="clear" class="secondary">Clear</button>
-          </div>
-          <div style="flex:1" class="note">Tip: gunakan <code>{index}</code> di template nama untuk nomor urut (mis. photo_{index}). Jika jumlah gambar kurang dari cell, sisanya akan kosong.</div>
-        </div>
-      </div>
-
-      <div class="preview">
-        <div class="grid-wrap card" id="previewArea">
-          <div id="gridPreview" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column">
-            <div class="small">Preview kosong — upload gambar lalu klik Render Preview</div>
-          </div>
-        </div>
-
-        <div class="right">
-          <div class="small">Preview settings</div>
-          <div style="height:10px"></div>
-          <canvas id="hiddenCanvas" style="display:none"></canvas>
-          <div id="info" class="small" style="margin-top:8px">Ready.</div>
-          <div style="height:10px"></div>
-          <div class="note">Gunakan file HTML ini langsung di GitHub Pages. File ini single-file (no external libs).</div>
-        </div>
-      </div>
-
+<div class="container">
+  <div class="header">
+    <div>
+      <div class="title">Photo Grid Generator</div>
+      <div class="subtitle">Dark neon UI — images kept at original size | Neon outline & profile card</div>
     </div>
+    <div class="small">KingPanda-Dev</div>
   </div>
 
+  <div class="grid-layout">
+    <div class="card">
+      <div class="controls">
+        <div class="row">
+          <div class="label">Upload Images</div>
+          <input id="files" class="input" type="file" accept="image/*" multiple />
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+          <div class="card-section setting-column">
+            <div class="small" style="font-weight:700">Grid Settings</div>
+            <div class="row"><div class="label">Columns (X)</div><input id="cols" class="input" type="number" min="1" value="3"></div>
+            <div class="row"><div class="label">Rows (Y)</div><input id="rows" class="input" type="number" min="1" value="3"></div>
+            <div class="small">Note: images will keep their original sizes. Grid will place images row-major order.</div>
+          </div>
+
+          <div class="card-section setting-column">
+            <div class="small" style="font-weight:700">Outline</div>
+            <div class="row"><div class="label">Outline per image</div>
+              <div class="toggle"><div id="outlineFake" class="checkbox-fake"><div class="check-dot"></div></div><div class="small" id="outlineLabel">OFF</div></div>
+            </div>
+            <div class="row"><div class="label">Outline color</div><input id="outlineColor" class="input" type="color" value="#28a8ff"></div>
+            <div class="row"><div class="label">Outline width</div><select id="outlineWidth" class="input"><option value="2">2px</option><option value="4">4px</option><option value="8">8px</option></select></div>
+            <div class="small">Outline appears as neon-blue glow with rounded corners.</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+          <div class="card-section">
+            <div class="small" style="font-weight:700">Export Quality</div>
+            <div class="row"><div class="label">Preset</div><select id="quality" class="input"><option value="480">480p</option><option value="720" selected>720p (HD)</option><option value="1080">1080p (Full HD)</option></select></div>
+            <div class="small">Preset controls final canvas max dimension (keeps aspect ratio per image).</div>
+          </div>
+
+          <div class="card-section">
+            <div class="small" style="font-weight:700">File Options</div>
+            <div class="row"><div class="label">Format</div><select id="format" class="input"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option value="image/webp">WEBP</option></select></div>
+            <div class="row"><div class="label">Filename</div><input id="nameTemplate" class="input" type="text" value="photo_{index}"></div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="render" class="btn neon">Render Preview</button>
+          <button id="downloadGrid" class="btn neon">Download Grid</button>
+          <button id="downloadIndiv" class="btn">Download Individually</button>
+          <button id="clear" class="btn">Clear</button>
+        </div>
+
+        <div class="info" id="info">Ready — upload images and press Render Preview.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="preview-area">
+        <div class="small">Preview</div>
+        <div id="previewWrap" class="preview-wrap">
+          <div id="gridPreview" class="grid small">No images yet — upload and render.</div>
+        </div>
+
+        <div class="profile-card">
+          <div class="avatar"><img id="avatarImg" src="https://cdn.discordapp.com/avatars/675212142701576234/9d591887b8f29923d3906b0118782c24.png?size=4096&ignore=true" alt="avatar"></div>
+          <div class="profile-info">
+            <div class="pname">KingPanda#6669</div>
+            <div class="prole">Developer / Creator</div>
+            <div class="small" style="margin-top:6px">Creator of Photo Grid Generator, passionate about coding & design. Add on Discord to collab: <strong>KingPanda#6669</strong></div>
+            <div style="margin-top:8px"><a id="discordLink" class="btn" href="https://discordapp.com/users/675212142701576234" target="_blank">Open Discord Profile</a></div>
+          </div>
+        </div>
+
+        <div class="license">© 2025 KingPanda-Development (Rudi Hartono) | Discord: KingPanda#6669</div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<canvas id="hiddenCanvas" style="display:none"></canvas>
+
 <script>
-// Photo Grid Generator - single-file
 const filesEl = document.getElementById('files');
 const colsEl = document.getElementById('cols');
 const rowsEl = document.getElementById('rows');
-const cellSizeEl = document.getElementById('cellSize');
-const nameTemplateEl = document.getElementById('nameTemplate');
 const formatEl = document.getElementById('format');
-const qualityEl = document.getElementById('quality');
-const outlineToggleEl = document.getElementById('outlineToggle');
-const outlineColorEl = document.getElementById('outlineColor');
-const outlineWidthEl = document.getElementById('outlineWidth');
+const nameTemplateEl = document.getElementById('nameTemplate');
 const renderBtn = document.getElementById('render');
 const downloadGridBtn = document.getElementById('downloadGrid');
 const downloadIndivBtn = document.getElementById('downloadIndiv');
 const clearBtn = document.getElementById('clear');
 const preview = document.getElementById('gridPreview');
-const hiddenCanvas = document.getElementById('hiddenCanvas');
 const info = document.getElementById('info');
+const hiddenCanvas = document.getElementById('hiddenCanvas');
+const outlineFake = document.getElementById('outlineFake');
+const outlineLabel = document.getElementById('outlineLabel');
+const outlineColorEl = document.getElementById('outlineColor');
+const outlineWidthEl = document.getElementById('outlineWidth');
+const qualityEl = document.getElementById('quality');
 
+let outlineOn = false;
 let images = [];
 
-function setInfo(t){ info.textContent = t }
+outlineFake.addEventListener('click', ()=>{
+  outlineOn = !outlineOn;
+  outlineFake.classList.toggle('active', outlineOn);
+  outlineLabel.textContent = outlineOn ? 'ON' : 'OFF';
+});
 
 filesEl.addEventListener('change', async e => {
   images = [];
-  const files = Array.from(e.target.files);
-  if(!files.length) return;
-  setInfo('Memuat gambar...');
+  const files = Array.from(e.target.files).filter(f=>f.type.startsWith('image/'));
+  if(!files.length){ info.textContent='No images.'; return; }
+  info.textContent = 'Loading images...';
   for(const f of files){
-    if(!f.type.startsWith('image/')) continue;
     const data = await readFileAsDataURL(f);
-    try{
-      const img = await loadImage(data);
-      images.push({file:f, img, data});
-    }catch(err){ console.warn('gambar gagal dimuat', f.name, err) }
+    try{ const img = await loadImage(data); images.push({file:f,img,data}); }
+    catch(e){ console.warn('failed',f.name); }
   }
-  setInfo(images.length + ' gambar siap. Klik Render Preview.');
+  info.textContent = images.length + ' images loaded. Set X/Y and Render Preview.';
 });
 
-function readFileAsDataURL(file){
-  return new Promise((res,rej)=>{
-    const r = new FileReader();
-    r.onload = ()=>res(r.result);
-    r.onerror = rej;
-    r.readAsDataURL(file);
-  });
-}
-
-function loadImage(dataURL){
-  return new Promise((res,rej)=>{
-    const i = new Image();
-    i.onload = ()=>res(i);
-    i.onerror = rej;
-    i.src = dataURL;
-  });
-}
+function readFileAsDataURL(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
+function loadImage(data){ return new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=data; }); }
 
 function renderPreview(){
-  const cols = Math.max(1, parseInt(colsEl.value)||1);
-  const rows = Math.max(1, parseInt(rowsEl.value)||1);
-  const cell = Math.max(20, parseInt(cellSizeEl.value)||100);
-  const gap = 6; // preview gap
-  const outline = outlineToggleEl.checked;
-  const outlineW = Math.max(0, parseInt(outlineWidthEl.value)||0);
-  const outlineColor = outlineColorEl.value;
+  const cols = Math.max(1,parseInt(colsEl.value)||1);
+  const rows = Math.max(1,parseInt(rowsEl.value)||1);
+  preview.innerHTML='';
+  const gridEl = document.createElement('div');
+  gridEl.style.display='grid';
+  gridEl.style.gridTemplateColumns = `repeat(${cols}, auto)`;
+  gridEl.style.gap = '8px';
 
-  // Build CSS grid preview inside preview element
-  preview.innerHTML = '';
-  const wrapper = document.createElement('div');
-  wrapper.className = 'grid';
-  wrapper.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-  wrapper.style.gap = gap + 'px';
-  wrapper.style.width = '100%';
+  const total = cols*rows;
+  for(let i=0;i<total;i++){
+    const wrapper = document.createElement('div');
+    wrapper.style.position='relative';
+    wrapper.style.display='inline-block';
+    wrapper.style.borderRadius='8px';
+    wrapper.style.overflow='hidden';
+    wrapper.style.background='#05141a';
+    wrapper.style.padding='4px';
+    if(images[i]){
+      const img = document.createElement('img');
+      img.src = images[i].data;
+      img.onload = ()=>{ /* keep natural size */ };
+      img.style.display='block';
+      wrapper.appendChild(img);
+    } else {
+      const ph = document.createElement('div'); ph.style.width='120px'; ph.style.height='90px'; ph.style.background='#021219'; ph.style.borderRadius='6px'; wrapper.appendChild(ph);
+    }
 
-  const totalCells = cols * rows;
-  for(let i=0;i<totalCells;i++){
-    const cellEl = document.createElement('div');
-    cellEl.style.width = '100%';
-    cellEl.style.paddingTop = (100/cols) + '%'; // responsive square trick (not perfect but ok)
-    cellEl.style.position = 'relative';
-    cellEl.style.minHeight = cell+'px';
-    cellEl.style.overflow = 'hidden';
-    cellEl.style.borderRadius = '8px';
-    if(outline && outlineW>0) cellEl.style.boxShadow = `0 0 0 ${outlineW}px ${outlineColor} inset`;
+    if(outlineOn){
+      wrapper.style.boxShadow = `0 0 ${outlineWidthEl.value*2}px ${outlineColorEl.value}`;
+      wrapper.style.border = `${outlineWidthEl.value}px solid ${outlineColorEl.value}`;
+    }
 
-    const imgEl = document.createElement('img');
-    imgEl.className = 'thumb';
-    imgEl.style.position = 'absolute';
-    imgEl.style.top = '0'; imgEl.style.left = '0'; imgEl.style.width='100%'; imgEl.style.height='100%'; imgEl.style.objectFit='cover';
-
-    if(images[i]) imgEl.src = images[i].data;
-    else imgEl.style.background = '#021224';
-
-    cellEl.appendChild(imgEl);
-    wrapper.appendChild(cellEl);
+    gridEl.appendChild(wrapper);
   }
-  preview.appendChild(wrapper);
-  setInfo(`Preview: ${cols} x ${rows} cells — ${images.length} gambar loaded`);
+  preview.appendChild(gridEl);
+  info.textContent = `Preview rendered — ${cols}x${rows}`;
 }
 
 async function generateCanvas(){
-  const cols = Math.max(1, parseInt(colsEl.value)||1);
-  const rows = Math.max(1, parseInt(rowsEl.value)||1);
-  const cell = Math.max(20, parseInt(cellSizeEl.value)||100);
-  const outline = outlineToggleEl.checked;
-  const outlineW = Math.max(0, parseInt(outlineWidthEl.value)||0);
-  const outlineColor = outlineColorEl.value;
+  if(!images.length) throw new Error('No images');
+  const cols = Math.max(1,parseInt(colsEl.value)||1);
+  const rows = Math.max(1,parseInt(rowsEl.value)||1);
+  const total = cols*rows;
 
-  const totalW = cols * cell + (cols-1)*0;
-  const totalH = rows * cell + (rows-1)*0;
-  hiddenCanvas.width = totalW;
-  hiddenCanvas.height = totalH;
-  const ctx = hiddenCanvas.getContext('2d');
+  // prepare matrix of placed images (use natural sizes)
+  const placed = [];
+  for(let i=0;i<total;i++) placed[i] = images[i] ? images[i].img : null;
 
-  // Fill background white for JPG (avoid transparent backgrounds unless PNG/WebP chosen)
-  if(formatEl.value === 'image/jpeg'){
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0,0,totalW,totalH);
-  } else {
-    ctx.clearRect(0,0,totalW,totalH);
+  // compute column widths and row heights
+  const colWidths = new Array(cols).fill(0);
+  const rowHeights = new Array(rows).fill(0);
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const idx = r*cols + c;
+      const img = placed[idx];
+      if(img){ colWidths[c] = Math.max(colWidths[c], img.naturalWidth); rowHeights[r] = Math.max(rowHeights[r], img.naturalHeight); }
+      else { colWidths[c] = Math.max(colWidths[c], 120); rowHeights[r] = Math.max(rowHeights[r], 90); }
+    }
   }
 
-  // draw images cell by cell
-  const totalCells = cols * rows;
-  for(let i=0;i<totalCells;i++){
-    const colIdx = i % cols;
-    const rowIdx = Math.floor(i / cols);
-    const x = colIdx * cell;
-    const y = rowIdx * cell;
+  // apply quality preset as max total width scaling
+  const preset = parseInt(qualityEl.value);
+  const totalW = colWidths.reduce((a,b)=>a+b,0);
+  const totalH = rowHeights.reduce((a,b)=>a+b,0);
+  const scale = Math.min(1, preset / Math.max(totalW, totalH));
 
-    if(images[i] && images[i].img){
-      const img = images[i].img;
-      // cover fit calculation
-      const imgRatio = img.width / img.height;
-      const cellRatio = cell / cell; // 1
-      let drawW = cell, drawH = cell, dx = x, dy = y;
-      if(imgRatio > 1){ // wide image -> fit height
-        drawH = cell;
-        drawW = img.width * (cell / img.height);
-        dx = x - (drawW - cell)/2;
-      } else {
-        drawW = cell;
-        drawH = img.height * (cell / img.width);
-        dy = y - (drawH - cell)/2;
-      }
-      ctx.drawImage(img, dx, dy, drawW, drawH);
-      if(outline && outlineW>0){
-        ctx.lineWidth = outlineW;
-        ctx.strokeStyle = outlineColor;
-        // stroke rect centered on border
-        ctx.strokeRect(x + outlineW/2, y + outlineW/2, cell - outlineW, cell - outlineW);
-      }
-    } else {
-      // empty cell - leave transparent or fill with dark color
-      ctx.fillStyle = '#021224';
-      ctx.fillRect(x,y,cell,cell);
-      if(outline && outlineW>0){
-        ctx.lineWidth = outlineW;
-        ctx.strokeStyle = outlineColor;
-        ctx.strokeRect(x + outlineW/2, y + outlineW/2, cell - outlineW, cell - outlineW);
+  const canvasW = Math.round(totalW * scale);
+  const canvasH = Math.round(totalH * scale);
+  hiddenCanvas.width = canvasW; hiddenCanvas.height = canvasH;
+  const ctx = hiddenCanvas.getContext('2d');
+
+  // background for JPEG
+  if(formatEl.value === 'image/jpeg') { ctx.fillStyle = '#fff'; ctx.fillRect(0,0,canvasW,canvasH); }
+  else { ctx.clearRect(0,0,canvasW,canvasH); }
+
+  // compute column x positions and row y positions scaled
+  const colX = [0]; for(let i=1;i<cols;i++) colX[i] = colX[i-1] + Math.round(colWidths[i-1]*scale);
+  const rowY = [0]; for(let i=1;i<rows;i++) rowY[i] = rowY[i-1] + Math.round(rowHeights[i-1]*scale);
+
+  // draw images
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const idx = r*cols + c;
+      const img = placed[idx];
+      const x = colX[c];
+      const y = rowY[r];
+      const w = Math.round((img ? img.naturalWidth : 120) * scale);
+      const h = Math.round((img ? img.naturalHeight : 90) * scale);
+      if(img){ ctx.drawImage(img, x, y, w, h); }
+      else { ctx.fillStyle='#021219'; ctx.fillRect(x,y,w,h); }
+
+      if(outlineOn){
+        ctx.save();
+        ctx.strokeStyle = outlineColorEl.value;
+        ctx.lineWidth = parseInt(outlineWidthEl.value) * Math.max(1,scale);
+        ctx.shadowColor = outlineColorEl.value;
+        ctx.shadowBlur = 12 * Math.max(1,scale);
+        roundRect(ctx, x+2, y+2, w-4, h-4, 8);
+        ctx.stroke();
+        ctx.restore();
       }
     }
   }
   return hiddenCanvas;
 }
 
-function downloadURI(uri, name){
-  const a = document.createElement('a');
-  a.href = uri;
-  a.download = name;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-}
+function roundRect(ctx,x,y,w,h,r){ if(w<2*r) r=w/2; if(h<2*r) r=h/2; ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
 
-renderBtn.addEventListener('click', ()=>{
-  renderPreview();
-});
+function downloadURI(uri,name){ const a=document.createElement('a'); a.href=uri; a.download=name; document.body.appendChild(a); a.click(); a.remove(); }
+
+renderBtn.addEventListener('click', ()=>{ renderPreview(); });
 
 downloadGridBtn.addEventListener('click', async ()=>{
-  if(!images.length){ setInfo('Tidak ada gambar. Upload dulu.'); return; }
-  setInfo('Membuat grid...');
-  const canvas = await generateCanvas();
-  const fmt = formatEl.value;
-  const q = Math.min(1, Math.max(0.1, parseFloat(qualityEl.value)||0.92));
-  const data = canvas.toDataURL(fmt, fmt === 'image/jpeg' ? q : undefined);
-  const name = (nameTemplateEl.value || 'grid') + (fmt === 'image/png' ? '.png' : fmt === 'image/jpeg' ? '.jpg' : '.webp');
-  downloadURI(data, name);
-  setInfo('Selesai. File di-download.');
+  if(!images.length){ info.textContent='No images uploaded.'; return; }
+  info.textContent='Generating grid...';
+  try{
+    const canvas = await generateCanvas();
+    const fmt = formatEl.value; const data = canvas.toDataURL(fmt);
+    const name = (nameTemplateEl.value||'grid') + (fmt==='image/png'?'.png':fmt==='image/jpeg'?'.jpg':'.webp');
+    downloadURI(data,name);
+    info.textContent='Download started.';
+  }catch(e){ info.textContent='Error: '+e.message; }
 });
 
-downloadIndivBtn.addEventListener('click', async ()=>{
-  if(!images.length){ setInfo('Tidak ada gambar. Upload dulu.'); return; }
-  setInfo('Menyiapkan unduhan...');
+downloadIndivBtn.addEventListener('click', ()=>{
+  if(!images.length){ info.textContent='No images.'; return; }
+  info.textContent='Preparing individual downloads...';
   const fmt = formatEl.value;
-  const q = Math.min(1, Math.max(0.1, parseFloat(qualityEl.value)||0.92));
-  // For each image, draw to canvas of cell size and download
-  const cell = Math.max(20, parseInt(cellSizeEl.value)||100);
-  for(let i=0;i<images.length;i++){
+  const cols = Math.max(1,parseInt(colsEl.value)||1);
+  images.forEach((it,i)=>{
     const c = document.createElement('canvas');
-    c.width = cell; c.height = cell;
+    c.width = it.img.naturalWidth; c.height = it.img.naturalHeight;
     const ctx = c.getContext('2d');
-    // white bg for JPG
-    if(fmt === 'image/jpeg'){ ctx.fillStyle='#fff'; ctx.fillRect(0,0,c.width,c.height); }
-    const img = images[i].img;
-    // cover fit
-    const imgRatio = img.width / img.height;
-    let drawW = cell, drawH = cell, dx=0, dy=0;
-    if(imgRatio > 1){ drawH = cell; drawW = img.width * (cell / img.height); dx = -(drawW - cell)/2; }
-    else { drawW = cell; drawH = img.height * (cell / img.width); dy = -(drawH - cell)/2; }
-    ctx.drawImage(img, dx, dy, drawW, drawH);
-    if(outlineToggleEl.checked && parseInt(outlineWidthEl.value) > 0){
-      ctx.lineWidth = parseInt(outlineWidthEl.value);
-      ctx.strokeStyle = outlineColorEl.value;
-      ctx.strokeRect(ctx.lineWidth/2, ctx.lineWidth/2, cell - ctx.lineWidth, cell - ctx.lineWidth);
-    }
-    const data = c.toDataURL(fmt, fmt === 'image/jpeg' ? q : undefined);
-    const index = i+1;
-    const name = (nameTemplateEl.value || 'photo_{index}').replace('{index}', index) + (fmt === 'image/png' ? '.png' : fmt === 'image/jpeg' ? '.jpg' : '.webp');
-    downloadURI(data, name);
-  }
-  setInfo('Selesai. Semua gambar di-download satu per satu.');
+    if(fmt==='image/jpeg'){ ctx.fillStyle='#fff'; ctx.fillRect(0,0,c.width,c.height); }
+    ctx.drawImage(it.img,0,0,c.width,c.height);
+    if(outlineOn){ ctx.strokeStyle=outlineColorEl.value; ctx.lineWidth=parseInt(outlineWidthEl.value); roundRect(ctx, 2,2,c.width-4,c.height-4,8); ctx.stroke(); }
+    const data = c.toDataURL(fmt);
+    const name = (nameTemplateEl.value||'photo_{index}').replace('{index}', i+1) + (fmt==='image/png'?'.png':fmt==='image/jpeg'?'.jpg':'.webp');
+    downloadURI(data,name);
+  });
+  info.textContent='Individual downloads initiated.';
 });
 
-clearBtn.addEventListener('click', ()=>{
-  images = [];
-  filesEl.value = '';
-  preview.innerHTML = '<div class="small">Preview kosong — upload gambar lalu klik Render Preview</div>';
-  setInfo('Bersih.');
-});
-
-// initial demo: nothing
-setInfo('Ready. Upload images dan atur grid.');
+clearBtn.addEventListener('click', ()=>{ images=[]; filesEl.value=''; preview.innerHTML='No images yet — upload and render.'; info.textContent='Cleared.' });
 
 </script>
 </body>
