@@ -171,6 +171,12 @@ function validateCols(){
   warningEl.style.display = 'none'; downloadGridBtn.disabled = false; downloadGridBtn.style.opacity = 1; return true;
 }
 
+function validateRows(){
+  const rows = parseInt(rowsEl.value) || 0;
+  if(rows > 10 || rows < 1){ warningEl.style.display = 'block'; downloadGridBtn.disabled = true; downloadGridBtn.style.opacity = 0.5; return false; }
+  warningEl.style.display = 'none'; downloadGridBtn.disabled = false; downloadGridBtn.style.opacity = 1; return true;
+}
+
 filesEl.addEventListener('change', async e => {
   const files = Array.from(e.target.files).filter(f=>f.type && f.type.startsWith('image/'));
   if(!files.length){ images=[]; setInfo('No images'); renderLive(); return; }
@@ -182,8 +188,8 @@ filesEl.addEventListener('change', async e => {
 
 // inputs that trigger live render
 [colsEl, rowsEl, gapEl, qualityEl, outlineModeEl, outlineColorEl, outlineWidthEl].forEach(el=>{
-  el.addEventListener('input', ()=>{ validateCols(); scheduleRender(); });
-  el.addEventListener('change', ()=>{ validateCols(); scheduleRender(); });
+  el.addEventListener('input', ()=>{ validateCols(); validateRows(); scheduleRender(); });
+  el.addEventListener('change', ()=>{ validateCols(); validateRows(); scheduleRender(); });
 });
 
 clearBtn.addEventListener('click', ()=>{ images=[]; filesEl.value=''; setInfo('Cleared'); scheduleRender(); });
@@ -203,6 +209,7 @@ function renderLive(){
 
   // quick validation
   validateCols();
+  validateRows();
 
   const total = cols * rows;
   const placed = [];
@@ -323,15 +330,15 @@ function downloadURI(uri,name){ const a=document.createElement('a'); a.href=uri;
 
 // Download handler with validation
 downloadGridBtn.addEventListener('click', async ()=>{
-  if(!validateCols()) return; if(!images.length){ setInfo('No images uploaded.'); return; }
+  if(!validateCols() || !validateRows()) return; if(!images.length){ setInfo('No images uploaded.'); return; }
   setInfo('Generating HD grid...'); downloadGridBtn.disabled = true; downloadGridBtn.style.opacity=0.5;
   try{ const canvas = await generateCanvas(); const fmt = formatEl.value; const data = canvas.toDataURL(fmt); const ext = fmt==='image/png'?'.png':fmt==='image/jpeg'?'.jpg':'.webp'; downloadURI(data,'grid'+ext); setInfo('Download started.'); }
   catch(err){ console.error(err); setInfo('Export failed: '+err.message); }
-  finally{ validateCols(); }
+  finally{ validateCols() validateRows(); }
 });
 
 // initial
-validateCols(); scheduleRender();
+validateCols(); validateRows(); scheduleRender();
 </script>
 </body>
 </html>
