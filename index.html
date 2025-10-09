@@ -311,8 +311,10 @@ async function generateCanvas(){
       const idx = r*cols + c;
       const img = placed[idx];
       const w = colWidths[c]; const h = rowHeights[r];
-      if(img){ ctx.drawImage(img, x, y, img.naturalWidth, img.naturalHeight, x, y, img.naturalWidth, img.naturalHeight); }
-      else { ctx.fillStyle='#011216'; ctx.fillRect(x,y,w,h); }
+      if(img){
+        // draw full image using correct source coords (use 9-arg drawImage to be explicit)
+        ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, x, y, img.naturalWidth, img.naturalHeight);
+      } else { ctx.fillStyle='#011216'; ctx.fillRect(x,y,w,h); }
 
       if(outlineOn){ ctx.save(); ctx.strokeStyle = outlineColorEl.value; ctx.lineWidth = parseInt(outlineWidthEl.value); ctx.shadowColor = outlineColorEl.value; ctx.shadowBlur = 12; roundRect(ctx, x+1, y+1, w-2, h-2, 10); ctx.stroke(); ctx.restore(); }
 
