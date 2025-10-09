@@ -167,7 +167,7 @@ function setInfo(t){ infoEl.textContent = t }
 // validate cols <= 10 and disable download if invalid
 function validateCols(){
   const cols = parseInt(colsEl.value) || 0;
-  if(cols > 10){ warningEl.style.display = 'block'; downloadGridBtn.disabled = true; downloadGridBtn.style.opacity = 0.5; return false; }
+  if(cols > 10 || rows < 1){ warningEl.style.display = 'block'; downloadGridBtn.disabled = true; downloadGridBtn.style.opacity = 0.5; return false; }
   warningEl.style.display = 'none'; downloadGridBtn.disabled = false; downloadGridBtn.style.opacity = 1; return true;
 }
 
