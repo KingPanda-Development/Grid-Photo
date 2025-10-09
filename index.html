@@ -282,7 +282,7 @@ async function generateCanvas(){
   if(!images.length) throw new Error('No images');
   const cols = Math.max(1, parseInt(colsEl.value)||1);
   const rows = Math.max(1, parseInt(rowsEl.value)||1);
-  if(cols > 10) throw new Error('Columns exceed limit');
+  if(cols > 10 || rows > 10) throw new Error('Columns exceed limit');
   const gap = parseInt(gapEl.value)||0;
   const outlineMode = outlineModeEl.value; const outlineOn = outlineMode !== 'off';
 
@@ -334,7 +334,7 @@ downloadGridBtn.addEventListener('click', async ()=>{
   setInfo('Generating HD grid...'); downloadGridBtn.disabled = true; downloadGridBtn.style.opacity=0.5;
   try{ const canvas = await generateCanvas(); const fmt = formatEl.value; const data = canvas.toDataURL(fmt); const ext = fmt==='image/png'?'.png':fmt==='image/jpeg'?'.jpg':'.webp'; downloadURI(data,'grid'+ext); setInfo('Download started.'); }
   catch(err){ console.error(err); setInfo('Export failed: '+err.message); }
-  finally{ validateCols() validateRows(); }
+  finally{ validateCols(); validateRows(); }
 });
 
 // initial
