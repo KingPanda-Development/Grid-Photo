@@ -3,135 +3,125 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Photo Grid Generator — Neon Dark</title>
+<title>Photo Grid Generator — v3 Neon Pro</title>
 <style>
 :root{
-  --bg:#071025; --card:#061327; --panel:#081828; --muted:#9fb0c4; --neon:#28a8ff; --neon-weak:rgba(40,168,255,0.18);
+  --bg:#050814; --card:#071422; --panel:#041826; --muted:#9fb0c4; --neon:#28a8ff; --neon-weak:rgba(40,168,255,0.14);
 }
 *{box-sizing:border-box}
 html,body{height:100%}
-body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;background:linear-gradient(180deg,#02050a,var(--bg));color:#e6f2ff}
-.container{max-width:1150px;margin:28px auto;padding:20px}
+body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;background:linear-gradient(180deg,#01030a,var(--bg));color:#e6f6ff}
+.container{max-width:1200px;margin:20px auto;padding:18px}
 .header{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.title{font-size:20px;font-weight:700}
+.title{font-size:20px;font-weight:800}
 .subtitle{color:var(--muted);font-size:13px}
-.grid-layout{display:grid;grid-template-columns:1fr 360px;gap:18px;margin-top:18px}
-.card{background:linear-gradient(180deg,var(--card),#031322);border-radius:12px;padding:14px;box-shadow:0 8px 30px rgba(2,6,23,.6);border:1px solid rgba(255,255,255,0.03)}
-.controls{display:grid;grid-template-columns:1fr;gap:10px}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+.card{background:linear-gradient(180deg,var(--card),#02121a);border-radius:12px;padding:14px;box-shadow:0 10px 40px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.03)}
+.section-title{font-weight:700;color:#dff7ff;margin-bottom:8px}
+.controls{display:grid;gap:12px}
 .row{display:flex;gap:8px;align-items:center}
 .label{min-width:110px;color:var(--muted);font-size:13px}
-.input, select{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px;border-radius:8px;color:var(--muted);min-width:0}
-.input[type=file]{color:var(--muted)}
+.input,select{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px;border-radius:10px;color:var(--muted);width:100%}
+.btn{background:linear-gradient(180deg,#001824,#002a3a);border:1px solid rgba(255,255,255,0.04);padding:10px 14px;border-radius:12px;color:#dff6ff;font-weight:800;cursor:pointer}
+.btn.neon{box-shadow:0 0 8px var(--neon-weak);border:1px solid rgba(40,168,255,0.25)}
+.btn.neon:hover{transform:translateY(-3px);box-shadow:0 10px 40px rgba(40,168,255,0.14),0 0 28px rgba(40,168,255,0.25);border-color:var(--neon)}
 .small{font-size:12px;color:var(--muted)}
-.actions{display:flex;gap:8px;align-items:center;margin-top:8px}
-.btn{background:linear-gradient(180deg,#001824,#002a3a);border:1px solid rgba(255,255,255,0.04);padding:10px 14px;border-radius:10px;color:#dff6ff;font-weight:700;cursor:pointer;position:relative;overflow:visible}
-.btn:focus{outline:none}
-.btn.neon{box-shadow:0 0 10px rgba(40,168,255,0.06);border:1px solid rgba(40,168,255,0.25)}
-.btn.neon:hover{transform:translateY(-3px);box-shadow:0 6px 28px var(--neon-weak),0 0 18px rgba(40,168,255,0.25);border-color:var(--neon)}
-.preview-area{min-height:380px;display:flex;flex-direction:column;gap:12px}
-.preview-wrap{background:linear-gradient(180deg,#031a25,#041827);padding:12px;border-radius:10px;border:1px solid rgba(40,168,255,0.06);box-shadow:0 6px 30px rgba(2,6,23,.6);overflow:auto}
-.grid{display:grid;gap:8px}
-.grid img{display:block}
-.profile-card{display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;background:linear-gradient(180deg,#02121a,#031429);border:1px solid rgba(255,255,255,0.03)}
-.avatar{width:72px;height:72px;border-radius:14px;flex:0 0 72px;overflow:hidden;border:2px solid rgba(255,255,255,0.04)}
+.preview-wrap{overflow:hidden;border-radius:10px;border:1px solid rgba(255,255,255,0.02);background:linear-gradient(180deg,#031a23,#02131a);padding:12px}
+.grid-view{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.grid-item{display:inline-block;border-radius:10px;overflow:hidden;background:#021219;padding:4px}
+.grid-item img{display:block;height:auto;width:auto;max-width:100%;}
+.profile{display:flex;gap:12px;align-items:center;padding:12px;border-radius:10px;background:linear-gradient(180deg,#02121a,#031429);border:1px solid rgba(255,255,255,0.02)}
+.avatar{width:72px;height:72px;border-radius:14px;overflow:hidden;border:2px solid rgba(255,255,255,0.03)}
 .avatar img{width:100%;height:100%;object-fit:cover}
 .profile-info{flex:1}
-.pname{font-weight:700}
-.prole{font-size:12px;color:var(--neon)}
-.license{margin-top:12px;text-align:center;color:var(--muted);font-size:12px}
-.card-section{border-radius:10px;padding:10px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg,#041424,#021221)}
-.setting-column{display:grid;gap:10px}
-.toggle{display:inline-flex;align-items:center;gap:8px}
-.checkbox-fake{width:20px;height:20px;border-radius:6px;border:2px solid rgba(255,255,255,0.06);display:inline-block;position:relative;cursor:pointer;background:transparent}
-.checkbox-fake.active{box-shadow:0 0 12px rgba(40,168,255,0.18);border-color:var(--neon);background:linear-gradient(180deg,rgba(40,168,255,0.06),rgba(40,168,255,0.02))}
-.checkbox-fake .check-dot{position:absolute;inset:3px;border-radius:3px;background:var(--neon);opacity:0;transform:scale(.6)}
-.checkbox-fake.active .check-dot{opacity:1;transform:scale(1)}
-.footer{margin-top:18px}
-.info{font-size:12px;color:var(--muted)}
-@media(max-width:980px){.grid-layout{grid-template-columns:1fr}}
+.license{text-align:center;color:var(--muted);margin-top:8px;font-size:12px}
+.controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:600px){.controls-grid{grid-template-columns:1fr}}
+.slider{width:100%}
+.footer-box{display:flex;flex-direction:column;gap:8px}
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">
     <div>
-      <div class="title">Photo Grid Generator</div>
-      <div class="subtitle">Dark neon UI — images kept at original size | Neon outline & profile card</div>
+      <div class="title">Photo Grid Generator — v3 (Neon Pro)</div>
+      <div class="subtitle">Preview matches exported image • No horizontal scroll on mobile • Images keep original sizes</div>
     </div>
-    <div class="small">KingPanda-Dev</div>
+    <div class="small">KingPanda-Development</div>
   </div>
 
-  <div class="grid-layout">
+  <div class="layout">
+    <!-- Settings box -->
     <div class="card">
+      <div class="section-title">Settings</div>
       <div class="controls">
         <div class="row">
           <div class="label">Upload Images</div>
           <input id="files" class="input" type="file" accept="image/*" multiple />
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
-          <div class="card-section setting-column">
-            <div class="small" style="font-weight:700">Grid Settings</div>
+        <div class="controls-grid">
+          <div>
+            <div class="small" style="font-weight:700">Grid</div>
             <div class="row"><div class="label">Columns (X)</div><input id="cols" class="input" type="number" min="1" value="3"></div>
-            <div class="row"><div class="label">Rows (Y)</div><input id="rows" class="input" type="number" min="1" value="3"></div>
-            <div class="small">Note: images will keep their original sizes. Grid will place images row-major order.</div>
+            <div class="row" style="margin-top:6px"><div class="label">Rows (Y)</div><input id="rows" class="input" type="number" min="1" value="3"></div>
+            <div class="small" style="margin-top:6px">Images placed row-major. Each image keeps original pixel size, scaled by export preset.</div>
           </div>
 
-          <div class="card-section setting-column">
-            <div class="small" style="font-weight:700">Outline</div>
-            <div class="row"><div class="label">Outline per image</div>
-              <div class="toggle"><div id="outlineFake" class="checkbox-fake"><div class="check-dot"></div></div><div class="small" id="outlineLabel">OFF</div></div>
-            </div>
-            <div class="row"><div class="label">Outline color</div><input id="outlineColor" class="input" type="color" value="#28a8ff"></div>
-            <div class="row"><div class="label">Outline width</div><select id="outlineWidth" class="input"><option value="2">2px</option><option value="4">4px</option><option value="8">8px</option></select></div>
-            <div class="small">Outline appears as neon-blue glow with rounded corners.</div>
-          </div>
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
-          <div class="card-section">
-            <div class="small" style="font-weight:700">Export Quality</div>
-            <div class="row"><div class="label">Preset</div><select id="quality" class="input"><option value="480">480p</option><option value="720" selected>720p (HD)</option><option value="1080">1080p (Full HD)</option></select></div>
-            <div class="small">Preset controls final canvas max dimension (keeps aspect ratio per image).</div>
-          </div>
-
-          <div class="card-section">
-            <div class="small" style="font-weight:700">File Options</div>
-            <div class="row"><div class="label">Format</div><select id="format" class="input"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option value="image/webp">WEBP</option></select></div>
-            <div class="row"><div class="label">Filename</div><input id="nameTemplate" class="input" type="text" value="photo_{index}"></div>
+          <div>
+            <div class="small" style="font-weight:700">Export / Outline</div>
+            <div class="row"><div class="label">Quality</div><select id="quality" class="input"><option value="480">480p</option><option value="720" selected>720p</option><option value="1080">1080p</option></select></div>
+            <div class="row" style="margin-top:6px"><div class="label">Format</div><select id="format" class="input"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option value="image/webp">WEBP</option></select></div>
+            <div class="row" style="margin-top:6px"><div class="label">Outline</div><select id="outlineMode" class="input"><option value="off">Off</option><option value="neon">Neon Glow</option></select></div>
+            <div class="row" style="margin-top:6px"><div class="label">Outline color</div><input id="outlineColor" class="input" type="color" value="#28a8ff"></div>
+            <div class="row" style="margin-top:6px"><div class="label">Outline width</div><select id="outlineWidth" class="input"><option value="2">2px</option><option value="4">4px</option><option value="8">8px</option></select></div>
           </div>
         </div>
 
-        <div class="actions">
+        <div>
+          <div class="small" style="font-weight:700;margin-top:8px">Spacing</div>
+          <div class="row"><div class="label">Gap (px)</div><input id="gap" type="range" min="0" max="60" value="12" class="slider"></div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
           <button id="render" class="btn neon">Render Preview</button>
           <button id="downloadGrid" class="btn neon">Download Grid</button>
           <button id="downloadIndiv" class="btn">Download Individually</button>
           <button id="clear" class="btn">Clear</button>
         </div>
 
-        <div class="info" id="info">Ready — upload images and press Render Preview.</div>
+        <div class="small" id="info" style="margin-top:8px">Ready — upload images lalu Render Preview.</div>
       </div>
     </div>
 
+    <!-- Preview box -->
     <div class="card">
-      <div class="preview-area">
-        <div class="small">Preview</div>
-        <div id="previewWrap" class="preview-wrap">
-          <div id="gridPreview" class="grid small">No images yet — upload and render.</div>
-        </div>
+      <div class="section-title">Preview</div>
+      <div id="previewWrap" class="preview-wrap">
+        <div id="gridPreview" class="grid-view small" style="min-height:240px">No images yet. Upload & render.</div>
+      </div>
 
-        <div class="profile-card">
-          <div class="avatar"><img id="avatarImg" src="https://cdn.discordapp.com/avatars/675212142701576234/9d591887b8f29923d3906b0118782c24.png?size=4096&ignore=true" alt="avatar"></div>
-          <div class="profile-info">
-            <div class="pname">KingPanda#6669</div>
-            <div class="prole">Developer / Creator</div>
-            <div class="small" style="margin-top:6px">Creator of Photo Grid Generator, passionate about coding & design. Add on Discord to collab: <strong>KingPanda#6669</strong></div>
-            <div style="margin-top:8px"><a id="discordLink" class="btn" href="https://discordapp.com/users/675212142701576234" target="_blank">Open Discord Profile</a></div>
-          </div>
-        </div>
+      <div style="height:12px"></div>
 
+      <div class="section-title">Profile</div>
+      <div class="profile">
+        <div class="avatar"><img id="avatarImg" src="https://cdn.discordapp.com/avatars/675212142701576234/9d591887b8f29923d3906b0118782c24.png?size=4096&ignore=true" alt="avatar"></div>
+        <div class="profile-info">
+          <div style="font-weight:800">KingPanda#6669</div>
+          <div style="color:var(--neon);font-size:13px;margin-top:4px">Developer / Creator</div>
+          <div class="small" style="margin-top:8px">Creator of Photo Grid Generator. Add on Discord to collab: <strong>KingPanda#6669</strong></div>
+          <div style="margin-top:8px"><a id="discordLink" class="btn" href="https://discordapp.com/users/675212142701576234" target="_blank">Open Discord Profile</a></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer box full width under two columns on wide screens -->
+    <div class="card" style="grid-column:1 / -1">
+      <div class="footer-box">
         <div class="license">© 2025 KingPanda-Development (Rudi Hartono) | Discord: KingPanda#6669</div>
-
       </div>
     </div>
   </div>
@@ -144,7 +134,7 @@ const filesEl = document.getElementById('files');
 const colsEl = document.getElementById('cols');
 const rowsEl = document.getElementById('rows');
 const formatEl = document.getElementById('format');
-const nameTemplateEl = document.getElementById('nameTemplate');
+const nameTemplateEl = document.getElementById('nameTemplate') || {value:'grid'};
 const renderBtn = document.getElementById('render');
 const downloadGridBtn = document.getElementById('downloadGrid');
 const downloadIndivBtn = document.getElementById('downloadIndiv');
@@ -152,30 +142,23 @@ const clearBtn = document.getElementById('clear');
 const preview = document.getElementById('gridPreview');
 const info = document.getElementById('info');
 const hiddenCanvas = document.getElementById('hiddenCanvas');
-const outlineFake = document.getElementById('outlineFake');
-const outlineLabel = document.getElementById('outlineLabel');
+const gapEl = document.getElementById('gap');
+const qualityEl = document.getElementById('quality');
+const outlineModeEl = document.getElementById('outlineMode');
 const outlineColorEl = document.getElementById('outlineColor');
 const outlineWidthEl = document.getElementById('outlineWidth');
-const qualityEl = document.getElementById('quality');
 
-let outlineOn = false;
 let images = [];
-
-outlineFake.addEventListener('click', ()=>{
-  outlineOn = !outlineOn;
-  outlineFake.classList.toggle('active', outlineOn);
-  outlineLabel.textContent = outlineOn ? 'ON' : 'OFF';
-});
 
 filesEl.addEventListener('change', async e => {
   images = [];
   const files = Array.from(e.target.files).filter(f=>f.type.startsWith('image/'));
-  if(!files.length){ info.textContent='No images.'; return; }
+  if(!files.length){ info.textContent='No images.'; preview.innerHTML='No images yet. Upload & render.'; return; }
   info.textContent = 'Loading images...';
   for(const f of files){
     const data = await readFileAsDataURL(f);
     try{ const img = await loadImage(data); images.push({file:f,img,data}); }
-    catch(e){ console.warn('failed',f.name); }
+    catch(err){ console.warn('failed load', f.name, err); }
   }
   info.textContent = images.length + ' images loaded. Set X/Y and Render Preview.';
 });
@@ -186,53 +169,58 @@ function loadImage(data){ return new Promise((res,rej)=>{ const i=new Image(); i
 function renderPreview(){
   const cols = Math.max(1,parseInt(colsEl.value)||1);
   const rows = Math.max(1,parseInt(rowsEl.value)||1);
+  const gap = parseInt(gapEl.value)||0;
   preview.innerHTML='';
-  const gridEl = document.createElement('div');
-  gridEl.style.display='grid';
-  gridEl.style.gridTemplateColumns = `repeat(${cols}, auto)`;
-  gridEl.style.gap = '8px';
+  preview.style.gap = gap + 'px';
 
   const total = cols*rows;
+  // create grid container but using flex-wrap to avoid horizontal overflow
+  const container = document.createElement('div');
+  container.className = 'grid-view';
+  container.style.gap = gap + 'px';
+  container.style.justifyContent = 'center';
+
   for(let i=0;i<total;i++){
     const wrapper = document.createElement('div');
-    wrapper.style.position='relative';
-    wrapper.style.display='inline-block';
-    wrapper.style.borderRadius='8px';
-    wrapper.style.overflow='hidden';
-    wrapper.style.background='#05141a';
-    wrapper.style.padding='4px';
+    wrapper.className = 'grid-item';
+    wrapper.style.boxSizing = 'border-box';
+
     if(images[i]){
       const img = document.createElement('img');
       img.src = images[i].data;
-      img.onload = ()=>{ /* keep natural size */ };
-      img.style.display='block';
+      img.alt = images[i].file.name;
+      // set natural width as max display width to prevent overflow on small screens
+      img.style.maxWidth = '100%';
+      img.style.height = 'auto';
+      // when outline neon
+      if(outlineModeEl.value === 'neon'){
+        wrapper.style.boxShadow = `0 6px 20px ${outlineColorEl.value}`;
+        wrapper.style.border = `${outlineWidthEl.value}px solid ${outlineColorEl.value}`;
+      }
       wrapper.appendChild(img);
     } else {
-      const ph = document.createElement('div'); ph.style.width='120px'; ph.style.height='90px'; ph.style.background='#021219'; ph.style.borderRadius='6px'; wrapper.appendChild(ph);
+      const ph = document.createElement('div');
+      ph.style.width = '140px'; ph.style.height = '96px'; ph.style.background = '#011216'; ph.style.borderRadius='8px'; wrapper.appendChild(ph);
     }
-
-    if(outlineOn){
-      wrapper.style.boxShadow = `0 0 ${outlineWidthEl.value*2}px ${outlineColorEl.value}`;
-      wrapper.style.border = `${outlineWidthEl.value}px solid ${outlineColorEl.value}`;
-    }
-
-    gridEl.appendChild(wrapper);
+    container.appendChild(wrapper);
   }
-  preview.appendChild(gridEl);
-  info.textContent = `Preview rendered — ${cols}x${rows}`;
+  preview.appendChild(container);
+  info.textContent = `Preview rendered — ${cols}×${rows}`;
 }
 
+// generate canvas that matches preview layout (1:1)
 async function generateCanvas(){
   if(!images.length) throw new Error('No images');
   const cols = Math.max(1,parseInt(colsEl.value)||1);
   const rows = Math.max(1,parseInt(rowsEl.value)||1);
-  const total = cols*rows;
+  const gap = parseInt(gapEl.value)||0;
+  const outlineOn = outlineModeEl.value === 'neon';
 
-  // prepare matrix of placed images (use natural sizes)
+  const total = cols*rows;
   const placed = [];
   for(let i=0;i<total;i++) placed[i] = images[i] ? images[i].img : null;
 
-  // compute column widths and row heights
+  // compute column widths and row heights based on natural sizes
   const colWidths = new Array(cols).fill(0);
   const rowHeights = new Array(rows).fill(0);
   for(let r=0;r<rows;r++){
@@ -240,52 +228,64 @@ async function generateCanvas(){
       const idx = r*cols + c;
       const img = placed[idx];
       if(img){ colWidths[c] = Math.max(colWidths[c], img.naturalWidth); rowHeights[r] = Math.max(rowHeights[r], img.naturalHeight); }
-      else { colWidths[c] = Math.max(colWidths[c], 120); rowHeights[r] = Math.max(rowHeights[r], 90); }
+      else { colWidths[c] = Math.max(colWidths[c], 140); rowHeights[r] = Math.max(rowHeights[r], 96); }
     }
   }
 
-  // apply quality preset as max total width scaling
-  const preset = parseInt(qualityEl.value);
-  const totalW = colWidths.reduce((a,b)=>a+b,0);
-  const totalH = rowHeights.reduce((a,b)=>a+b,0);
-  const scale = Math.min(1, preset / Math.max(totalW, totalH));
+  // total dims including gaps
+  const totalW = colWidths.reduce((a,b)=>a+b,0) + (cols-1)*gap;
+  const totalH = rowHeights.reduce((a,b)=>a+b,0) + (rows-1)*gap;
 
-  const canvasW = Math.round(totalW * scale);
-  const canvasH = Math.round(totalH * scale);
-  hiddenCanvas.width = canvasW; hiddenCanvas.height = canvasH;
+  // determine scale from quality preset (target max dimension)
+  const preset = parseInt(qualityEl.value) || 720; // target max dim
+  const maxDim = Math.max(totalW, totalH);
+  const scale = maxDim <= preset ? 1 : preset / maxDim;
+
+  // use devicePixelRatio to keep sharpness on high-dpi screens
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  hiddenCanvas.width = Math.round(totalW * scale * dpr);
+  hiddenCanvas.height = Math.round(totalH * scale * dpr);
+  hiddenCanvas.style.width = Math.round(totalW * scale) + 'px';
+  hiddenCanvas.style.height = Math.round(totalH * scale) + 'px';
+
   const ctx = hiddenCanvas.getContext('2d');
+  ctx.setTransform(dpr*scale,0,0,dpr*scale,0,0);
 
   // background for JPEG
-  if(formatEl.value === 'image/jpeg') { ctx.fillStyle = '#fff'; ctx.fillRect(0,0,canvasW,canvasH); }
-  else { ctx.clearRect(0,0,canvasW,canvasH); }
-
-  // compute column x positions and row y positions scaled
-  const colX = [0]; for(let i=1;i<cols;i++) colX[i] = colX[i-1] + Math.round(colWidths[i-1]*scale);
-  const rowY = [0]; for(let i=1;i<rows;i++) rowY[i] = rowY[i-1] + Math.round(rowHeights[i-1]*scale);
+  if(formatEl.value === 'image/jpeg'){
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,totalW, totalH);
+  } else {
+    ctx.clearRect(0,0,totalW, totalH);
+  }
 
   // draw images
+  let y = 0;
   for(let r=0;r<rows;r++){
+    let x = 0;
     for(let c=0;c<cols;c++){
       const idx = r*cols + c;
       const img = placed[idx];
-      const x = colX[c];
-      const y = rowY[r];
-      const w = Math.round((img ? img.naturalWidth : 120) * scale);
-      const h = Math.round((img ? img.naturalHeight : 90) * scale);
-      if(img){ ctx.drawImage(img, x, y, w, h); }
-      else { ctx.fillStyle='#021219'; ctx.fillRect(x,y,w,h); }
+      const w = colWidths[c];
+      const h = rowHeights[r];
+      if(img){ ctx.drawImage(img, x, y, img.naturalWidth, img.naturalHeight, x, y, img.naturalWidth, img.naturalHeight); }
+      else { ctx.fillStyle='#011216'; ctx.fillRect(x,y,w,h); }
 
+      // outline (neon) - draw stroke with shadow
       if(outlineOn){
         ctx.save();
         ctx.strokeStyle = outlineColorEl.value;
-        ctx.lineWidth = parseInt(outlineWidthEl.value) * Math.max(1,scale);
+        ctx.lineWidth = parseInt(outlineWidthEl.value);
         ctx.shadowColor = outlineColorEl.value;
-        ctx.shadowBlur = 12 * Math.max(1,scale);
-        roundRect(ctx, x+2, y+2, w-4, h-4, 8);
+        ctx.shadowBlur = 12;
+        // rounded rect stroke
+        roundRect(ctx, x+1, y+1, w-2, h-2, 10);
         ctx.stroke();
         ctx.restore();
       }
+
+      x += w + gap;
     }
+    y += rowHeights[r] + gap;
   }
   return hiddenCanvas;
 }
@@ -301,8 +301,9 @@ downloadGridBtn.addEventListener('click', async ()=>{
   info.textContent='Generating grid...';
   try{
     const canvas = await generateCanvas();
-    const fmt = formatEl.value; const data = canvas.toDataURL(fmt);
-    const name = (nameTemplateEl.value||'grid') + (fmt==='image/png'?'.png':fmt==='image/jpeg'?'.jpg':'.webp');
+    const fmt = formatEl.value;
+    const data = canvas.toDataURL(fmt);
+    const name = 'grid' + (fmt==='image/png'?'.png':fmt==='image/jpeg'?'.jpg':'.webp');
     downloadURI(data,name);
     info.textContent='Download started.';
   }catch(e){ info.textContent='Error: '+e.message; }
@@ -312,22 +313,28 @@ downloadIndivBtn.addEventListener('click', ()=>{
   if(!images.length){ info.textContent='No images.'; return; }
   info.textContent='Preparing individual downloads...';
   const fmt = formatEl.value;
-  const cols = Math.max(1,parseInt(colsEl.value)||1);
   images.forEach((it,i)=>{
     const c = document.createElement('canvas');
-    c.width = it.img.naturalWidth; c.height = it.img.naturalHeight;
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    c.width = Math.round(it.img.naturalWidth * dpr);
+    c.height = Math.round(it.img.naturalHeight * dpr);
+    c.style.width = it.img.naturalWidth + 'px';
+    c.style.height = it.img.naturalHeight + 'px';
     const ctx = c.getContext('2d');
-    if(fmt==='image/jpeg'){ ctx.fillStyle='#fff'; ctx.fillRect(0,0,c.width,c.height); }
-    ctx.drawImage(it.img,0,0,c.width,c.height);
-    if(outlineOn){ ctx.strokeStyle=outlineColorEl.value; ctx.lineWidth=parseInt(outlineWidthEl.value); roundRect(ctx, 2,2,c.width-4,c.height-4,8); ctx.stroke(); }
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    if(fmt==='image/jpeg'){ ctx.fillStyle='#fff'; ctx.fillRect(0,0,it.img.naturalWidth,it.img.naturalHeight); }
+    ctx.drawImage(it.img,0,0,it.img.naturalWidth,it.img.naturalHeight);
+    if(outlineModeEl.value==='neon'){
+      ctx.strokeStyle = outlineColorEl.value; ctx.lineWidth = parseInt(outlineWidthEl.value); roundRect(ctx,2,2,it.img.naturalWidth-4,it.img.naturalHeight-4,8); ctx.stroke();
+    }
     const data = c.toDataURL(fmt);
-    const name = (nameTemplateEl.value||'photo_{index}').replace('{index}', i+1) + (fmt==='image/png'?'.png':fmt==='image/jpeg'?'.jpg':'.webp');
+    const name = ('photo_'+(i+1)+ (fmt==='image/png'?'.png':fmt==='image/jpeg'?'.jpg':'.webp'));
     downloadURI(data,name);
   });
-  info.textContent='Individual downloads initiated.';
+  info.textContent='Individual downloads started.';
 });
 
-clearBtn.addEventListener('click', ()=>{ images=[]; filesEl.value=''; preview.innerHTML='No images yet — upload and render.'; info.textContent='Cleared.' });
+clearBtn.addEventListener('click', ()=>{ images=[]; filesEl.value=''; preview.innerHTML='No images yet. Upload & render.'; info.textContent='Cleared.' });
 
 </script>
 </body>
