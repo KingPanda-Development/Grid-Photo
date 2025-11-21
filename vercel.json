@@ -9,22 +9,23 @@
   ],
   "rewrites": [
     {
+      "source": "/secretfile",
+      "destination": "/secretfile"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
   ],
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/secretfile",
       "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
       ]
     },
     {
-      "source": "/secretfile",
+      "source": "/raw/bokep",
       "headers": [
         { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
       ]
