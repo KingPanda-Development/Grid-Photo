@@ -7,22 +7,24 @@
       "use": "@vercel/static"
     }
   ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/secretfile/index.html",
-      "destination": "/secretfile/index.html"
+      "src": "^/secretfile$",
+      "dest": "/secretfile/index.html",
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8"
+      }
     },
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ],
-  "headers": [
+      "src": "^/secretfile/$",
+      "dest": "/secretfile/index.html",
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8"
+      }
+    },
     {
-      "source": "/secretfile/index.html",
-      "headers": [
-        { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
-      ]
+      "src": ".*",
+      "dest": "/index.html"
     }
   ]
 }
