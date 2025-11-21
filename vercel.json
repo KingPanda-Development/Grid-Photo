@@ -10,7 +10,7 @@
   "rewrites": [
     {
       "source": "/secretfile",
-      "destination": "/secretfile"
+      "destination": "/secretfile/index.html"
     },
     {
       "source": "/(.*)",
