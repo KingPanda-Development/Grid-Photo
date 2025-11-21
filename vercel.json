@@ -1,6 +1,12 @@
 {
   "version": 2,
   "name": "grid-photo",
+  "builds": [
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    }
+  ],
   "rewrites": [
     {
       "source": "/secretfile",
