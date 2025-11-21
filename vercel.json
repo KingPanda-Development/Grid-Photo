@@ -1,24 +1,20 @@
 {
   "version": 2,
-  "name": "grid-photo",
   "builds": [
-    { "src": "**", "use": "@vercel/static" }
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "secretfile/index.html", "use": "@vercel/static" }
   ],
   "routes": [
     {
       "src": "^/secretfile$",
-      "dest": "/secretfile/index.html",
-      "headers": {
-        "Content-Type": "text/plain; charset=utf-8"
-      }
+      "dest": "/secretfile/index.html"
     },
     {
-      "src": "^/(.*)",
-      "dest": "/$1"
+      "src": "^/secretfile/(.*)",
+      "dest": "/secretfile/$1"
     },
     {
-      "src": "/.*",
-      "status": 404,
+      "src": "^(.*)$",
       "dest": "/index.html"
     }
   ]
