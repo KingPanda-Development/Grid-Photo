@@ -9,7 +9,7 @@
   ],
   "rewrites": [
     {
-      "source": "/secretfile",
+      "source": "/secretfile/index.html",
       "destination": "/secretfile/index.html"
     },
     {
@@ -19,13 +19,7 @@
   ],
   "headers": [
     {
-      "source": "/secretfile",
-      "headers": [
-        { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
-      ]
-    },
-    {
-      "source": "/raw/bokep",
+      "source": "/secretfile/index.html",
       "headers": [
         { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
       ]
