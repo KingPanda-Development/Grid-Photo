@@ -2,31 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Download List</title>
+    <title>Download Center</title>
 
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Segoe UI", sans-serif;
+            background: #0f111a;
+            color: #e5e5e5;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+            color: #ffffff;
+        }
+
+        .card {
+            background: #1a1c27;
+            border: 1px solid #2a2d3a;
+            border-radius: 12px;
             padding: 20px;
+            margin-bottom: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.25s;
         }
 
-        ul {
-            list-style: none;
-            padding: 0;
+        .card:hover {
+            background: #242736;
+            transform: translateY(-3px);
         }
 
-        li {
-            margin-bottom: 12px;
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .file-icon {
+            width: 48px;
+            height: 48px;
+            background: #3b82f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .file-name {
+            font-size: 20px;
+            font-weight: 600;
         }
 
         .download-btn {
-            padding: 8px 16px;
+            padding: 10px 20px;
+            background: #3b82f6;
+            border-radius: 8px;
+            color: white;
             font-size: 15px;
             border: none;
-            border-radius: 6px;
-            background: #3b82f6;
-            color: white;
             cursor: pointer;
+            transition: 0.25s;
         }
 
         .download-btn:hover {
@@ -36,38 +77,39 @@
 </head>
 <body>
 
-    <h2>Download Files</h2>
+<h1>Download Center</h1>
 
-    <ul id="downloadList">
-        <!-- Tambah item seperti ini -->
-        <li data-url="https://github.com/KingPanda-Development/Grid-Photo/releases/download/v5.37/GrowtopiaInstaller.exe">
-            Growtopia (new)
-            <button class="download-btn" onclick="downloadFile(this)">Download</button>
-        </li>
+<!-- ========================== -->
+<!-- LIST DOWNLOAD DI SINI -->
+<!-- ========================== -->
 
-        <!--<li data-url="https://example.com/file2.zip">
-            File 2 (ZIP)
-            <button class="download-btn" onclick="downloadFile(this)">Download</button>
-        </li>
+<div class="card" data-url="https://github.com/KingPanda-Development/Grid-Photo/releases/download/v5.37/GrowtopiaInstaller.exe">
+    <div class="file-info">
+        <div class="file-icon">EXE</div>
+        <div class="file-name">Growtopia V5.33 (PC)</div>
+    </div>
+    <button class="download-btn" onclick="downloadFile(this)">Download</button>
+</div>
 
-        <li data-url="https://example.com/file3.png">
-            File 3 (Image)
-            <button class="download-btn" onclick="downloadFile(this)">Download</button>
-        </li>-->
-    </ul>
+<!--<div class="card" data-url="https://example.com/AnotherFile.zip">
+    <div class="file-info">
+        <div class="file-icon">ZIP</div>
+        <div class="file-name">Another Update Pack</div>
+    </div>
+    <button class="download-btn" onclick="downloadFile(this)">Download</button>
+</div>-->
 
-    <script>
-        function downloadFile(button) {
-            const url = button.parentElement.getAttribute("data-url");
-
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }
-    </script>
+<script>
+function downloadFile(btn) {
+    const url = btn.parentElement.getAttribute("data-url");
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+</script>
 
 </body>
 </html>
