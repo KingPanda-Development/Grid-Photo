@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Download List</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 12px;
+        }
+
+        .download-btn {
+            padding: 8px 16px;
+            font-size: 15px;
+            border: none;
+            border-radius: 6px;
+            background: #3b82f6;
+            color: white;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Download Files</h2>
+
+    <ul id="downloadList">
+        <!-- Tambah item seperti ini -->
+        <li data-url="downloadlist/files/GrowtopiaInstaller.exe">
+            Growtopia (new)
+            <button class="download-btn" onclick="downloadFile(this)">Download</button>
+        </li>
+
+        <!--<li data-url="https://example.com/file2.zip">
+            File 2 (ZIP)
+            <button class="download-btn" onclick="downloadFile(this)">Download</button>
+        </li>
+
+        <li data-url="https://example.com/file3.png">
+            File 3 (Image)
+            <button class="download-btn" onclick="downloadFile(this)">Download</button>
+        </li>-->
+    </ul>
+
+    <script>
+        function downloadFile(button) {
+            const url = button.parentElement.getAttribute("data-url");
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
+
+</body>
+</html>
