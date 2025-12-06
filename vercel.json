@@ -3,7 +3,8 @@
   "builds": [
     { "src": "index.html", "use": "@vercel/static" },
     { "src": "secretfile/index.html", "use": "@vercel/static" },
-    { "src": "downloadlist/index.html", "use": "@vercel/static" }
+    { "src": "downloadlist/index.html", "use": "@vercel/static" },
+    { "src": ".well-known/**/*", "use": "@vercel/static" }
   ],
   "routes": [
     {
