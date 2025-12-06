@@ -3,7 +3,8 @@
   "builds": [
     { "src": "index.html", "use": "@vercel/static" },
     { "src": "secretfile/index.html", "use": "@vercel/static" },
-    { "src": "downloadlist/index.html", "use": "@vercel/static" }
+    { "src": "downloadlist/index.html", "use": "@vercel/static" },
+    { "src": ".well-known/discord", "use": "@vercel/static" }
   ],
   "routes": [
     {
@@ -21,6 +22,10 @@
     {
       "src": "^/downloadlist/(.*)",
       "dest": "/downloadlist/$1"
+    },
+    {
+      "src": "/.well-known/discord/(.*)",
+      "dest": "/.well-known/discord/$1"
     },
     {
       "src": "^(.*)$",
